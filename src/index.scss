@@ -1,0 +1,15 @@
+
+@import '~antd/dist/antd.css';
+
+body, html {
+  height: 100%;
+  margin: 0;
+}
+.App {
+  width: 100%;
+  height: 625px;
+  display: block;
+}
+@import './styles/scss/headerHome.scss';
+@import './styles/scss/aboutHome.scss';
+@import './styles/scss/memberHome.scss';
