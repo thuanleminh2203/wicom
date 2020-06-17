@@ -10,7 +10,7 @@ import {
   UploadOutlined,
   VideoCameraOutlined,
 } from '@ant-design/icons'
-import ProfileUser from '../../profile/ProfileUser'
+import ProfileUser from './profile/ProfileUser'
 
 const { Header, Content, Footer, Sider } = Layout
 
