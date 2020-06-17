@@ -1,11 +1,14 @@
 import React from 'react'
 import { DownOutlined } from '@ant-design/icons'
+import { Link } from 'react-router-dom'
 const HeaderHome = () => {
   return (
     <div className="AppContainer">
       <div className="LogoContainer">
         <span className="LogoDetail">WicomLab</span>
-        <span className="LoginContainer">Login</span>
+        <span className="LoginTitle">
+          <Link to="/login">Login</Link>
+        </span>
       </div>
       <div className="TitleApp">
         <div>

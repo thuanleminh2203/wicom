@@ -3,7 +3,7 @@
     margin-top: 17px;
     background-color: #ffffff;
     .MemberTop-left{
-        margin-left: -160px;
+        margin-left: -5px;
     }
     .Vertical-heading{
         display: inline-block;
@@ -28,13 +28,9 @@
         }
     }
 
-    & p{
-        margin-left: -13px;
-    }
-
     .ant-carousel .slick-slide {
         text-align: center;
-        height: 160px;
+        height: 300px;
         line-height: 160px;
         background: #364d79;
         overflow: hidden;
@@ -43,4 +39,73 @@
       .ant-carousel .slick-slide h3 {
         color: #fff;
       }
+
+    .ImageMember {
+        position: relative;
+        & img {
+            width: 337px;
+        }
+        & .ImageOverlay{
+            background-color: rgba(33,34,38,.9);;
+            position: absolute;
+            top: 0;
+            height: 300px;
+            width: 337px;
+            -webkit-transition: all 300ms linear;
+            transition: all 300ms linear;
+            opacity: 0.8;
+            & h3{
+                color: #f4c613;
+                font-size: 16px;
+                font-family: "Open Sans", sans-serif;
+            }
+            & p{
+                margin-top: -134px;
+                margin-bottom:0px;
+                color: white;
+                font-size: 16px;
+                font-family: "Open Sans", sans-serif;
+            }
+        }
+        & .SocialList{
+            display: flex;
+            justify-content: center;
+            padding: 0;
+            list-style-type: none;
+            & li{
+                padding-left: 8px;
+            }
+            & :nth-child(1){
+                padding-left: 0;
+            }
+            & a{
+                border: 1px solid #fff;
+                width: 45px;
+                height: 45px;
+                display: inline-block;
+                margin-bottom: 18px;
+                color: #fff;
+                border-radius: 50%;
+                padding-top: 10px;
+                -webkit-transition: all 400ms linear;
+                transition: all 400ms linear;
+            }
+            & img {
+                width: 24px;
+                height: 24px;
+                margin-left: 9px;
+            }
+            .Facebook:hover{
+                background-color: #3b5998;
+                border: 1px solid #3b5998;
+            }
+            .Gmail:hover{
+                background-color: #dd4b39;
+                border: 1px solid #dd4b39;
+            }
+        }
+    }
+    .ImageMemberContainer {
+        margin-left: 314px;
+    }
 }

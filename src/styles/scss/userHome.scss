@@ -1,0 +1,22 @@
+.UserHomeContainer {
+     .logo {
+        height: 32px;
+        text-align: center;
+        color: #ffffff;
+        font-size: 18px;
+        margin: 16px;
+        cursor: pointer;
+      }
+      .LayoutContainer .LayoutBackground {
+        background: #fff;
+        min-height: 511px;
+      }
+      .LayoutBackgroundHeader{
+        background: #fff;
+      }
+      .LayoutContainer {
+          .ant-layout-content {
+            min-height: 450px;
+          }
+      }
+}

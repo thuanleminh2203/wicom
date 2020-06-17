@@ -1,10 +1,12 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { Row, Col, Carousel } from 'antd'
-
+import member1 from './../../styles/images/team/team-1.jpg'
+import member2 from './../../styles/images/team/team-2.jpg'
+import member3 from './../../styles/images/team/team-3.jpg'
+import fb from './../../styles/icons/fb.png'
+import gmail from './../../styles/icons/gmail.png'
 const MemberHome = () => {
-  function onChange(a, b, c) {
-    console.log(a, b, c)
-  }
+  const [isChangeBackground, setIsChangeBackground] = useState(false)
 
   return (
     <div className="MemberContainer">
@@ -24,17 +26,80 @@ const MemberHome = () => {
             </p>
           </div>
         </Col>
-        <Col span={6}>
-          <Carousel afterChange={onChange}>
-            <Row>
-              <Col>
-                <div>
-                  <img src="" alt="null" />
+        <Col span={6} className="ImageMemberContainer">
+          <div>
+            <Carousel justify="end" autoplay={true}>
+              <div
+                className="ImageMember"
+                onMouseEnter={() => setIsChangeBackground(true)}
+                onMouseLeave={() => setIsChangeBackground(false)}
+              >
+                <img src={member1} alt="null" />
+                <div className={isChangeBackground ? 'ImageOverlay' : ''}>
+                  <h3>Cristiano</h3>
+                  <p>Web Design</p>
+                  <ul className="SocialList">
+                    <li>
+                      <a href="#" className="Facebook">
+                        <img src={fb} />
+                      </a>
+                    </li>
+                    <li>
+                      <a href="#" className="Gmail">
+                        <img src={gmail} />
+                      </a>
+                    </li>
+                  </ul>
                 </div>
-              </Col>
-              <Col>aaa</Col>
-            </Row>
-          </Carousel>
+              </div>
+              <div
+                className="ImageMember"
+                onMouseEnter={() => setIsChangeBackground(true)}
+                onMouseLeave={() => setIsChangeBackground(false)}
+              >
+                <img src={member2} alt="null" />
+                <div className={isChangeBackground ? 'ImageOverlay' : ''}>
+                  <h3>Cristiano</h3>
+                  <p>Web Design</p>
+                  <ul className="SocialList">
+                    <li>
+                      <a href="#" className="Facebook">
+                        <img src={fb} />
+                      </a>
+                    </li>
+                    <li>
+                      <a href="#" className="Gmail">
+                        <img src={gmail} />
+                      </a>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+              <div
+                className="ImageMember"
+                onMouseEnter={() => setIsChangeBackground(true)}
+                onMouseLeave={() => setIsChangeBackground(false)}
+              >
+                <img src={member3} alt="null" />
+                <div className={isChangeBackground ? 'ImageOverlay' : ''}>
+                  <h3>Cristiano</h3>
+                  <p>Web Design</p>
+                  <ul className="SocialList">
+                    <li>
+                      <a href="#" className="Facebook">
+                        <img src={fb} />
+                      </a>
+                    </li>
+                    <li>
+                      <a href="#" className="Gmail">
+                        <img src={gmail} />
+                      </a>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </Carousel>
+          </div>
         </Col>
       </Row>
     </div>

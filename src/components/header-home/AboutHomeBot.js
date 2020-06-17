@@ -12,14 +12,14 @@ const AboutHomeBot = () => {
         'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Aut voluptatem, uidem impedit tempora delectus, cumque molestiae.',
     },
     {
-      id: 1,
+      id: 2,
       iconUrl: 'https://img.icons8.com/metro/26/000000/visible.png',
       title: 'Vission',
       content:
         'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Aut voluptatem, uidem impedit tempora delectus, cumque molestiae.',
     },
     {
-      id: 1,
+      id: 3,
       iconUrl: 'https://img.icons8.com/windows/32/000000/pencil-tip.png',
       title: 'Passion',
       content:
