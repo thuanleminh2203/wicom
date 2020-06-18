@@ -3,7 +3,19 @@
         text-align: left;
 
     }
-    // .ant-avatar{
-    //     text-align: center;
-    // }
+    .InforDetailContainer {
+        align-items: center;
+    }
+    .AvatarContainer{
+        border: 2px solid black;
+        border-radius: 50%;
+        width: 175px;
+        text-align: center;
+        margin: auto;
+    }
+    .TextName{
+        font-weight: 300;
+        font-size: 20px;
+        text-transform: uppercase;
+    }
 }

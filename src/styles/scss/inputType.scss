@@ -1,7 +1,6 @@
 .ImputComponentsContainer {
     & .InputContainer{
-        width: 100%;
-        min-width: 0;
+        min-width: 300px;
         padding: 4px 11px;
         color: rgba(0,0,0,.65);
         font-size: 14px;
@@ -12,6 +11,7 @@
         border-radius: 2px;
         -webkit-transition: all .3s;
         transition: all .3s;
+        margin-left: 30%;
     }
     & .InputContainer:focus{
         border : 1px solid #1890ff;
@@ -20,4 +20,8 @@
         outline-offset: 0px !important;
         outline: none !important;
     }
+}
+
+.LabelContainer{
+    margin-left: 40%;
 }

@@ -1,22 +1,31 @@
 .UserHomeContainer {
+      ul {
+        display: flex;
+        flex-grow: 1;
+        justify-content: space-around;
+      }
      .logo {
-        height: 32px;
-        text-align: center;
+        // height: 32px;
+        // text-align: center;
         color: #ffffff;
         font-size: 18px;
-        margin: 16px;
+        // margin: 16px;
         cursor: pointer;
       }
-      .LayoutContainer .LayoutBackground {
-        background: #fff;
-        min-height: 511px;
+      .ant-layout-header{
+        display: flex;
       }
-      .LayoutBackgroundHeader{
-        background: #fff;
+      .ant-menu{
+        margin: auto;
+
       }
-      .LayoutContainer {
-          .ant-layout-content {
-            min-height: 450px;
-          }
+      .ant-menu.ant-menu-dark .ant-menu-item-selected {
+        border-radius: 6px;
+      }
+      #components-layout-demo-fixed .logo {
+        width: 120px;
+        height: 31px;
+        background: rgba(255, 255, 255, 0.2);
+        margin: 16px 24px 16px 0;
       }
 }

@@ -16,6 +16,10 @@ const LayoutComponent = Loadable({
   loader: () => import('./pages/UserHome'),
   loading: () => null,
 })
+const MyPageComponent = Loadable({
+  loader: () => import('./pages/MyPage'),
+  loading: () => null,
+})
 
 function App() {
   return (
@@ -24,6 +28,7 @@ function App() {
         <Route exact path="/" component={Home} />
         <Route path="/login" exact component={Login} />
         <Route path="/home" exact component={LayoutComponent} />
+        <Route path="/mypage" exact component={MyPageComponent} />
         {/* <Route component={Error404} /> */}
       </Switch>
     </Router>

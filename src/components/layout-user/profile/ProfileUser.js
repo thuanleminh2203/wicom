@@ -25,30 +25,84 @@ const data = [
     isValidate: true,
     data: 'Le Minh Thuan',
   },
+  {
+    id: 4,
+    label: 'Khóa',
+    type: 'number',
+    min: 0,
+    max: 10,
+    isValidate: true,
+    data: 60,
+  },
+  {
+    id: 5,
+    label: 'Ngày sinh',
+    type: 'text',
+    min: 0,
+    max: 10,
+    isValidate: true,
+    data: '22-03-1997',
+  },
+  {
+    id: 6,
+    label: 'Số điện thoại',
+    type: 'text',
+    min: 0,
+    max: 10,
+    isValidate: true,
+    data: '0981352703',
+  },
+  {
+    id: 7,
+    label: 'Team',
+    type: 'text',
+    min: 0,
+    max: 10,
+    isValidate: true,
+    data: 'FPGA',
+  },
+  {
+    id: 8,
+    label: 'Project',
+    type: 'text',
+    min: 0,
+    max: 10,
+    isValidate: true,
+    data: 'Sonar',
+  },
 ]
 const ProfileUser = () => {
   return (
     <div className="ProfileUserContainer">
       {src ? (
-        <Avatar src={src} size={150} />
+        <>
+          <div className="AvatarContainer">
+            <Avatar src={src} size={150} />
+          </div>
+          <p className="TextName">Doãn Chí Bình</p>
+        </>
       ) : (
-        <Avatar
-          style={{
-            color: '#f56a00',
-            backgroundColor: '#fde3cf',
-          }}
-        >
-          U
-        </Avatar>
+        <div className="AvatarContainer">
+          <Avatar
+            style={{
+              color: '#f56a00',
+              backgroundColor: '#fde3cf',
+            }}
+          >
+            U
+          </Avatar>
+        </div>
       )}
       <div className="InforContainer">
         <h2>Information</h2>
-        {data.map((value) => (
-          <FormContainer key={value.id}>
-            <LabelComponent value={value.label} />
-            <InputComponents type={value.type} isValidate={value.isValidate} data={value.data} />
-          </FormContainer>
-        ))}
+        <div className="InforDetailContainer">
+          {data.map((value) => (
+            <FormContainer key={value.id} style={{ marginTop: '10px' }}>
+              <LabelComponent value={value.label} />
+              <InputComponents type={value.type} isValidate={value.isValidate} data={value.data} />
+            </FormContainer>
+          ))}
+        </div>
       </div>
     </div>
   )

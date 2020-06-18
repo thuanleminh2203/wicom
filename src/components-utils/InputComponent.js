@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import { Col } from 'antd'
 const InputComponents = (props) => {
   const { type, min, max, isValidate, style, data } = props
   const [username, setUsername] = useState(data)
@@ -31,7 +32,11 @@ const InputComponents = (props) => {
     )
   }
 
-  const returnInput = () => <div className="ImputComponentsContainer">{siwtchComponent(type)}</div>
+  const returnInput = () => (
+    <Col span={8}>
+      <div className="ImputComponentsContainer">{siwtchComponent(type)}</div>
+    </Col>
+  )
   return returnInput()
 }
 
