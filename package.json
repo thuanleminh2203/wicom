@@ -11,7 +11,7 @@
     "eslint": "^6.6.0",
     "eslint-plugin-prettier": "^3.1.1",
     "eslint-plugin-react": "^7.16.0",
-    "moment": "^2.24.0",
+    "moment": "^2.27.0",
     "node-sass": "^4.13.0",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
@@ -29,7 +29,6 @@
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
-
   "eslintConfig": {
     "extends": "react-app"
   },

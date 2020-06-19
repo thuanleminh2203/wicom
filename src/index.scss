@@ -9,6 +9,7 @@ body, html {
   width: 100%;
   height: 625px;
   display: block;
+  color: #ffffff;
 }
 @import './styles/scss/headerHome.scss';
 @import './styles/scss/aboutHome.scss';
@@ -17,3 +18,5 @@ body, html {
 @import './styles/scss/userHome.scss';
 @import './styles/scss/profile.scss';
 @import './styles/scss/inputType.scss';
+@import './styles/scss/mainHome.scss';
+

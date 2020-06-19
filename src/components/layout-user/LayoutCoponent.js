@@ -10,6 +10,8 @@ import { Link, useHistory } from 'react-router-dom'
 // import { BrowserRouter as Router, Switch, Route, useRouteMatch } from 'react-router-dom'
 import MyPageComponents from '../mypage/MyPageComponent'
 import ProfileUser from './profile/ProfileUser'
+import StatusComponent from '../home/component-in-home/StatusComponent'
+import MainHome from '../home/MainHome'
 
 const data = [
   {
@@ -38,7 +40,7 @@ const LayoutComponent = () => {
   const switchBody = (key) => {
     switch (key) {
       case '1':
-        return <h1>1111111111111111</h1>
+        return <MainHome />
       case '2':
         return <h1>22222222222222222</h1>
       case '3':
@@ -52,7 +54,15 @@ const LayoutComponent = () => {
   }
   return (
     <Layout className="UserHomeContainer">
-      <Header style={{ position: 'fixed', zIndex: 1, width: '100%' }}>
+      <Header
+        style={{
+          position: 'fixed',
+          zIndex: 1,
+          width: '100%',
+          backgroundColor: '#242526',
+          borderBottom: '1px solid #666565',
+        }}
+      >
         <div className="logo">WicomLab</div>
         <Menu theme="dark" mode="horizontal" defaultSelectedKeys={['4']}>
           {data.map((value) => (
@@ -77,8 +87,11 @@ const LayoutComponent = () => {
           </div>
         </div>
       </Header>
-      <Content className="site-layout" style={{ padding: '0 50px', marginTop: 64 }}>
-        <div className="site-layout-background" style={{ padding: 24, minHeight: 380 }}>
+      <Content className="site-layout" style={{ marginTop: 64, backgroundColor: '#18191a' }}>
+        <div
+          className="site-layout-background"
+          style={{ padding: '0px 0px 24px 0px', minHeight: 380 }}
+        >
           {switchBody(idSelect)}
         </div>
       </Content>

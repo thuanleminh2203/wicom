@@ -1,7 +1,11 @@
 import React, { useState } from 'react'
 import { Col } from 'antd'
+import { Input } from 'antd'
+
+const { TextArea } = Input
+
 const InputComponents = (props) => {
-  const { type, min, max, isValidate, style, data } = props
+  const { type, isValidate, data } = props
   const [username, setUsername] = useState(data)
 
   function setValue(e) {
@@ -16,20 +20,42 @@ const InputComponents = (props) => {
     }
   }
   const siwtchComponent = (type) => {
-    return (
-      <input
-        className="InputContainer"
-        type={type}
-        name="name"
-        min={min}
-        max={max}
-        isValidate={isValidate}
-        style={style}
-        onChange={(e) => setValue(e)}
-        value={username}
-        autoComplete="off"
-      />
-    )
+    const { min, max, isValidate, style } = props
+    switch (type) {
+      case 'text':
+        return (
+          <input
+            className="InputContainer"
+            type={type}
+            name="name"
+            min={min}
+            max={max}
+            isValidate={isValidate}
+            style={style}
+            onChange={(e) => setValue(e)}
+            value={username}
+            autoComplete="off"
+          />
+        )
+      case 'textarea': {
+        const { placeholder = '' } = props
+        return <TextArea style={style} placeholder={placeholder} autoSize />
+      }
+    }
+    // return (
+    //   <input
+    //     className="InputContainer"
+    //     type={type}
+    //     name="name"
+    //     min={min}
+    //     max={max}
+    //     isValidate={isValidate}
+    //     style={style}
+    //     onChange={(e) => setValue(e)}
+    //     value={username}
+    //     autoComplete="off"
+    //   />
+    // )
   }
 
   const returnInput = () => (
