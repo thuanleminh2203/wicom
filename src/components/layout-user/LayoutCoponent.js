@@ -6,12 +6,13 @@ import {
   ProjectOutlined,
   UserOutlined,
 } from '@ant-design/icons'
-import { Link, useHistory } from 'react-router-dom'
+// import { Link, useHistory } from 'react-router-dom'
 // import { BrowserRouter as Router, Switch, Route, useRouteMatch } from 'react-router-dom'
-import MyPageComponents from '../mypage/MyPageComponent'
+// import MyPageComponents from '../mypage/MyPageComponent'
 import ProfileUser from './profile/ProfileUser'
-import StatusComponent from '../home/component-in-home/StatusComponent'
+// import StatusComponent from '../home/component-in-home/StatusComponent'
 import MainHome from '../home/MainHome'
+import ChatComponent from '../home/component/ChatComponent'
 
 const data = [
   {
@@ -35,9 +36,10 @@ const { Header, Content, Footer } = Layout
 const src = 'https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png'
 
 const LayoutComponent = () => {
-  const [idSelect, setIdSelect] = useState('4')
+  const [idSelect, setIdSelect] = useState('1')
 
   const switchBody = (key) => {
+    // console.log("======key",key);
     switch (key) {
       case '1':
         return <MainHome />
@@ -64,7 +66,7 @@ const LayoutComponent = () => {
         }}
       >
         <div className="logo">WicomLab</div>
-        <Menu theme="dark" mode="horizontal" defaultSelectedKeys={['4']}>
+        <Menu theme="dark" mode="horizontal" defaultSelectedKeys={['1']}>
           {data.map((value) => (
             <Menu.Item key={value.key} onClick={(e) => setIdSelect(e.key)}>
               {value.component}
@@ -93,6 +95,7 @@ const LayoutComponent = () => {
           style={{ padding: '0px 0px 24px 0px', minHeight: 380 }}
         >
           {switchBody(idSelect)}
+          <ChatComponent />
         </div>
       </Content>
       <Footer style={{ textAlign: 'center' }}>Ant Design ©2018 Created by Ant UED</Footer>

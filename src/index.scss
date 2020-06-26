@@ -1,9 +1,14 @@
 
 @import '~antd/dist/antd.css';
+@import 'typeface-roboto';
 
 body, html {
   height: 100%;
   margin: 0;
+}
+p, span , h1, h2,h3,h4,h5 {
+  font-family: 'Times New Roman', Times, serif;
+  color: #ffffff;
 }
 .App {
   width: 100%;

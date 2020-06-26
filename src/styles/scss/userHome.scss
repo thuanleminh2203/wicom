@@ -1,34 +1,190 @@
 .UserHomeContainer {
-      ul {
-        display: flex;
-        flex-grow: 1;
-        justify-content: space-around;
-        background-color: #242526 !important;
-        border-bottom: 1px solid #666565 !important;
-        height: 64px;
-      }
-     .logo {
-        // height: 32px;
-        // text-align: center;
-        color: #ffffff;
-        font-size: 18px;
-        // margin: 16px;
+  ul {
+    display: flex;
+    flex-grow: 1;
+    justify-content: space-around;
+    background-color: #242526 !important;
+    border-bottom: 1px solid #666565 !important;
+    height: 64px;
+  }
+
+  .logo {
+    // height: 32px;
+    // text-align: center;
+    color: #ffffff;
+    font-size: 18px;
+    // margin: 16px;
+    cursor: pointer;
+  }
+
+  .ant-layout-header {
+    display: flex;
+  }
+
+  .ant-menu {
+    margin: auto;
+
+  }
+
+  .ant-menu.ant-menu-dark .ant-menu-item-selected {
+    border-radius: 6px;
+  }
+
+  #components-layout-demo-fixed .logo {
+    width: 120px;
+    height: 31px;
+    background: rgba(255, 255, 255, 0.2);
+    margin: 16px 24px 16px 0;
+  }
+}
+
+.UserChatContainer {
+  display: flex;
+  flex-direction: column;
+  text-align: end;
+  margin-right: 56px;
+  overflow-y: scroll;
+  height: 456px;
+  position: fixed;
+  top: 20%;
+  width: 25%;
+
+  & img {
+    width: 30px;
+    height: 30px;
+  }
+
+  & .Username {
+    color: #ffffff;
+    margin: 5px;
+  }
+
+  & .UserDisplay:first-child {
+    margin-top: 0px;
+  }
+
+
+  & .UserDisplay {
+    margin-top: 15px;
+    cursor: pointer;
+    margin-right: 36px;
+  }
+
+  &::-webkit-scrollbar-track {
+    border-radius: 10px;
+    background-color: #242526;
+
+  }
+
+  &::-webkit-scrollbar {
+    width: 8px;
+    height: 30px;
+    background-color: rgba(0, 0, 0, 0.65);
+  }
+
+  &::-webkit-scrollbar-thumb {
+    border-radius: 10px;
+    background-color: #555;
+  }
+}
+
+.ChatContainer{
+  width: 355px;
+  height: 469px;
+  border-radius: 11px;
+  position: fixed;
+  bottom: 15px;
+  right: 188px;
+  background-color: #242526;
+  & img{
+    height: 32px;
+    width: 32px;
+    border: 1px solid none;
+    border-radius: 50%;
+  }
+  & .ChatHeader{
+    padding-left: 21px;
+    & span svg:hover {
+      cursor: pointer;
+    }
+  }
+  & .Username{
+    margin-left: 7px;
+  }
+  & .ChatContent{
+    overflow-y: scroll;
+    height: 349px;
+
+    &::-webkit-scrollbar-track {
+      border-radius: 10px;
+      background-color: #242526;
+  
+    }
+  
+    &::-webkit-scrollbar {
+      width: 5px;
+      background-color: rgba(0, 0, 0, 0.65);
+    }
+  
+    &::-webkit-scrollbar-thumb {
+      border-radius: 10px;
+      background-color: #555;
+    }
+
+    & p{
+      background-color: #3e4042;
+      padding: 3px 8px 0px 8px;
+      border-radius: 15px 35px 30px 5px;
+      display: inline-block;
+      margin-left: 7%;
+      max-width: 64%;
+      margin-bottom: 3px;
+    }
+    & .MyMessage{
+      background-color: #0082fa;
+      padding: 0px 8px 3px 8px;
+      display: inline-block;
+      margin-left: 31%;   
+    }
+  }
+  & .ImputComponentsContainer textarea {
+    height: 53px !important;
+    resize:none;
+    border-radius: 4px;
+    border: none;
+    margin-left: 24px;
+    width: 95%;
+
+    &::-webkit-scrollbar-track {
+      border-radius: 10px;
+      background-color: #3e4042;
+    }
+  
+    &::-webkit-scrollbar {
+      width: 5px;
+      background-color: #3e4042;
+    }
+  
+    &::-webkit-scrollbar-thumb {
+      border-radius: 10px;
+      background-color: #555;
+    }
+  }
+
+  & .ant-row .ant-col-4 {
+    text-align: center;
+    & span {
+      padding-top: 12px;
+      & svg {
         cursor: pointer;
       }
-      .ant-layout-header{
-        display: flex;
-      }
-      .ant-menu{
-        margin: auto;
+    }
+  }
+}
 
-      }
-      .ant-menu.ant-menu-dark .ant-menu-item-selected {
-        border-radius: 6px;
-      }
-      #components-layout-demo-fixed .logo {
-        width: 120px;
-        height: 31px;
-        background: rgba(255, 255, 255, 0.2);
-        margin: 16px 24px 16px 0;
-      }
+.LineContainer{
+  border: none;
+  height: 1px;
+  color: #333; /* old IE */
+  background-color: #333;
 }

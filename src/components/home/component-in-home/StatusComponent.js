@@ -10,7 +10,6 @@ const StatusComponent = () => {
           backgroundColor: '#3a3b3c',
           color: '#ffffff',
           borderRadius: '2%',
-          // overflow: 'hiden',
         }}
         type="textarea"
       />

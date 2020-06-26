@@ -1,5 +1,5 @@
 import React from 'react'
-import { Avatar } from 'antd'
+import { Avatar, Col } from 'antd'
 import InputComponents from '../../../components-utils/InputComponent'
 import LabelComponent from '../../../components-utils/LabelComponent'
 import FormContainer from '../../../components-utils/FormContainer'
@@ -99,7 +99,13 @@ const ProfileUser = () => {
           {data.map((value) => (
             <FormContainer key={value.id} style={{ marginTop: '10px' }}>
               <LabelComponent value={value.label} />
-              <InputComponents type={value.type} isValidate={value.isValidate} data={value.data} />
+              <Col span={8}>
+                <InputComponents
+                  type={value.type}
+                  isValidate={value.isValidate}
+                  data={value.data}
+                />
+              </Col>
             </FormContainer>
           ))}
         </div>

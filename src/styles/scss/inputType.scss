@@ -20,6 +20,10 @@
         outline-offset: 0px !important;
         outline: none !important;
     }
+
+    & textarea {
+        overflow-y: scroll;
+    }
 }
 
 .LabelContainer{
