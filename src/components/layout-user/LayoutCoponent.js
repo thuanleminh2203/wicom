@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { Layout, Menu, Avatar } from 'antd'
 import {
   HomeOutlined,
@@ -13,6 +13,7 @@ import ProfileUser from './profile/ProfileUser'
 // import StatusComponent from '../home/component-in-home/StatusComponent'
 import MainHome from '../home/MainHome'
 import ChatComponent from '../home/component/ChatComponent'
+import ManagerPjComponent from '../project-manager/ManagerPjComponent'
 
 const data = [
   {
@@ -36,8 +37,12 @@ const { Header, Content, Footer } = Layout
 const src = 'https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png'
 
 const LayoutComponent = () => {
-  const [idSelect, setIdSelect] = useState('1')
+  const [idSelect, setIdSelect] = useState('3')
+  const [isDisplayChat, setIsDisplayChat] = useState(true)
 
+  useEffect(() => {
+    return () => setIsDisplayChat(false)
+  })
   const switchBody = (key) => {
     // console.log("======key",key);
     switch (key) {
@@ -46,7 +51,7 @@ const LayoutComponent = () => {
       case '2':
         return <h1>22222222222222222</h1>
       case '3':
-        return <h1>333333333333333333</h1>
+        return <ManagerPjComponent />
       case '4':
         return <ProfileUser />
 
@@ -66,7 +71,7 @@ const LayoutComponent = () => {
         }}
       >
         <div className="logo">WicomLab</div>
-        <Menu theme="dark" mode="horizontal" defaultSelectedKeys={['1']}>
+        <Menu theme="dark" mode="horizontal" defaultSelectedKeys={['3']}>
           {data.map((value) => (
             <Menu.Item key={value.key} onClick={(e) => setIdSelect(e.key)}>
               {value.component}
@@ -95,7 +100,7 @@ const LayoutComponent = () => {
           style={{ padding: '0px 0px 24px 0px', minHeight: 380 }}
         >
           {switchBody(idSelect)}
-          <ChatComponent />
+          {idSelect == '1' && isDisplayChat && <ChatComponent />}
         </div>
       </Content>
       <Footer style={{ textAlign: 'center' }}>Ant Design ©2018 Created by Ant UED</Footer>
