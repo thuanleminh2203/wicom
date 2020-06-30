@@ -63,3 +63,25 @@
         margin-left: 35%;
     }
 }
+
+.ProjectContainer{
+    & div {
+        margin-top: 5px;
+    }
+    & label {
+        color: #fff;
+    }
+    & .ProjectForm{
+        margin-left: 6%;
+        & .LabelContainer {
+            margin-left: 0%;
+        }
+    }
+    & .ant-picker-range{
+        margin-left: 93px;
+        width: 300px;
+    }
+    & .ProjectButton{
+        margin-left: 343px;
+    }
+}

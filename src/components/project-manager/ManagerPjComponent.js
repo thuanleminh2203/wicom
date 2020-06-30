@@ -5,9 +5,13 @@ import { DatePicker } from 'antd'
 import LabelComponent from '../../components-utils/LabelComponent'
 import InputComponents from '../../components-utils/InputComponent'
 import FormContainer from '../../components-utils/FormContainer'
+import { v4 as uuidv4 } from 'uuid'
+import { Button } from 'antd'
+
 const { RangePicker } = DatePicker
 
 let today = new Date()
+
 const day = 1000 * 60 * 60 * 24
 const dateFormat = Highcharts.dateFormat
 const defined = Highcharts.defined
@@ -21,51 +25,13 @@ today.setUTCMilliseconds(0)
 today = today.getTime()
 
 const options = {
-  series: [
-    {
-      name: 'Offices',
-      data: [
-        {
-          name: 'Sonar',
-          id: '123',
-          owner: 'Peter',
-          completed: {
-            amount: 0.5,
-          },
-        },
-        {
-          name: 'Prepare office building',
-          id: 'prepare_building',
-          parent: '123',
-          start: today - 2 * day,
-          end: today + 6 * day,
-          completed: {
-            amount: 0.5,
-          },
-          owner: 'Linda',
-        },
-        {
-          name: 'Inspect building',
-          id: 'inspect_building',
-          // dependency: 'prepare_building',
-          parent: '123',
-          start: today + 2 * day,
-          end: today + 8 * day,
-          owner: 'Ivy',
-        },
-        // {
-        //   name: 'Passed inspection',
-        //   id: 'passed_inspection',
-        //   dependency: ['prepare_building', 'inspect_building'],
-        //   // dependency: 'inspect_building',
-        //   parent: '123',
-        //   start: today + 9.5 * day,
-        //   // milestone: true,
-        //   owner: 'Peter',
-        // },
-      ],
+  chart: {
+    scrollablePlotArea: {
+      minWidth: 700,
+      scrollPositionY: 1,
     },
-  ],
+  },
+  series: [],
   tooltip: {
     pointFormatter: function() {
       var point = this,
@@ -125,125 +91,109 @@ const options = {
   },
   xAxis: {
     currentDateIndicator: true,
-    min: today - 3 * day,
+    min: today - 10 * day,
     max: today + 18 * day,
-  },
-}
-
-const data = {
-  series: [
-    {
-      name: 'Offices',
-      data: [
-        {
-          name: 'Sonar',
-          id: '123',
-          owner: 'Peter',
-          completed: {
-            amount: Math.floor(Math.random() * 100) / 100,
-          },
-        },
-        {
-          name: 'Prepare office building',
-          id: 'prepare_building',
-          parent: '123',
-          start: today - 2 * day,
-          end: today + 6 * day,
-          completed: {
-            amount: Math.floor(Math.random() * 100) / 100,
-          },
-          owner: 'Linda',
-        },
-        {
-          name: 'Inspect building',
-          id: 'inspect_building',
-          // dependency: 'prepare_building',
-          parent: '123',
-          start: today + 2 * day,
-          end: today + 8 * day,
-          owner: 'Ivy',
-        },
-        {
-          name: 'Passed inspection',
-          id: 'passed_inspection',
-          dependency: ['prepare_building', 'inspect_building'],
-          // dependency: 'inspect_building',
-          parent: '123',
-          start: today + 9.5 * day,
-          milestone: true,
-          owner: 'Peter',
-        },
-      ],
+    scrollbar: {
+      enabled: true,
     },
-  ],
+  },
 }
 
 export default function ManagerPjComponent() {
   const [dataChart, setDataChart] = useState(options)
+  const [data, setData] = useState({ namePj: '', deadline: [] })
+  const { namePj, deadline } = data
+  const { series = [] } = dataChart
+
+  const onChangeData = (e) => {
+    console.log(e)
+    if (e) {
+      if (Array.isArray(e)) {
+        setData({ ...data, deadline: e })
+        return
+      }
+      const { target } = e
+      const { value, name } = target
+      setData({ ...data, [name]: value })
+    }
+  }
+
+  const onSubmitData = () => {
+    const startTime = deadline[0].valueOf()
+    const endTime = deadline[1].valueOf()
+    const distance = endTime - startTime
+    const id = uuidv4()
+    const dependency0 = uuidv4()
+    const dependency1 = uuidv4()
+    const option = {
+      name: namePj,
+      data: [
+        {
+          name: namePj,
+          id,
+          owner: 'Peter',
+          completed: {
+            amount: 0.5,
+          },
+        },
+        {
+          name: 'Chuẩn bị',
+          id: dependency0,
+          parent: id,
+          start: startTime,
+          end: startTime + 0.1 * distance,
+          completed: {
+            amount: 0.5,
+          },
+          owner: 'Linda',
+        },
+        {
+          name: 'Thực hiện',
+          id: dependency1,
+          parent: id,
+          start: startTime + 0.1 * distance,
+          end: startTime + 0.9 * distance,
+          dependency: dependency0,
+          owner: 'Ivy',
+        },
+        {
+          name: 'Báo cáo',
+          id: uuidv4(),
+          parent: id,
+          start: startTime + 0.9 * distance,
+          end: endTime,
+          dependency: dependency1,
+          owner: 'Peter',
+        },
+      ],
+    }
+    setDataChart({ series: [...series, option] })
+  }
+
   return (
     <div className="ProjectContainer">
       <HighchartsReact highcharts={Highcharts} constructorType={'ganttChart'} options={dataChart} />
-      <button
-        onClick={() =>
-          setDataChart({
-            series: [
-              {
-                name: 'Offices',
-                data: [
-                  {
-                    name: 'Sonar',
-                    id: '123',
-                    owner: 'Peter',
-                    completed: {
-                      amount: Math.floor(Math.random() * 100) / 100,
-                    },
-                  },
-                  {
-                    name: 'Prepare office building',
-                    id: 'prepare_building',
-                    parent: '123',
-                    start: today - 2 * day,
-                    end: today + 6 * day,
-                    completed: {
-                      amount: Math.floor(Math.random() * 100) / 100,
-                    },
-                    owner: 'Linda',
-                  },
-                  {
-                    name: 'Inspect building',
-                    id: 'inspect_building',
-                    // dependency: 'prepare_building',
-                    parent: '123',
-                    start: today + 2 * day,
-                    end: today + 8 * day,
-                    owner: 'Ivy',
-                  },
-                  {
-                    name: 'Passed inspection',
-                    id: 'passed_inspection',
-                    dependency: ['prepare_building', 'inspect_building'],
-                    // dependency: 'inspect_building',
-                    parent: '123',
-                    start: today + 9.5 * day,
-                    milestone: true,
-                    owner: 'Peter',
-                  },
-                ],
-              },
-            ],
-          })
-        }
-      >
-        CLick Me babe
-      </button>
-      <div>
-        <button>Add new task</button>
-
-        <RangePicker format="DD-MM-YYYY" />
+      <div className="ProjectForm">
         <FormContainer>
           <LabelComponent value="Tên dự án" style={{ color: '#fff' }} />
-          <InputComponents type="text" />
+          <InputComponents
+            type="text"
+            dataInput1={namePj}
+            setDataInput1={onChangeData}
+            data={data}
+            value={deadline}
+            name="namePj"
+          />
         </FormContainer>
+        <div>
+          <label>Thời gian</label>
+          <RangePicker format="DD-MM-YYYY" showToday={true} onChange={(e) => onChangeData(e)} />
+        </div>
+        <div className="ProjectButton">
+          <Button onClick={onSubmitData} type="primary">
+            Add new task
+          </Button>
+        </div>
       </div>
     </div>
   )
