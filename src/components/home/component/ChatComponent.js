@@ -8,13 +8,18 @@ const data = {
   src: 'https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png',
 }
 
-export default function ChatComponent() {
+export default function ChatComponent(props) {
+  const { setIsDisplayChat } = props
+
   return (
     <div className="ChatContainer">
       <div className="ChatHeader">
         <img src={data.src} alt="Cant not display" />
         <span className="Username">{data.username}</span>
-        <CloseOutlined style={{ fontSize: '16px', color: '#fff', paddingLeft: '173px' }} />
+        <CloseOutlined
+          style={{ fontSize: '16px', color: '#fff', paddingLeft: '173px' }}
+          onClick={() => setIsDisplayChat(false)}
+        />
       </div>
       <hr className="LineContainer" />
       <div className="ChatContent">

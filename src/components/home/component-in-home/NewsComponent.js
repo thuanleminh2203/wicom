@@ -13,6 +13,7 @@ const CommentList = ({ comments }) => (
     renderItem={(props) => <Comment {...props} />}
   />
 )
+
 const Editor = ({ onChange, onSubmit, submitting, value }) => (
   <>
     <Form.Item>

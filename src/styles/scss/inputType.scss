@@ -29,3 +29,41 @@
 .LabelContainer{
     margin-left: 40%;
 }
+
+.ant-modal-root{
+    & p, span, h1, h2, h3, h4, h5 {
+        color: black;
+    }
+
+    & .ant-modal-body {
+         padding: 0px;
+         & .ImputComponentsContainer{
+             & textarea {
+                height: 250px !important;
+                width: 98%;
+                margin-left: 5px;
+                 &::-webkit-scrollbar-track {
+                    border-radius: 10px;
+                    background-color: rgb(58, 59, 60);
+                  }
+                
+                  &::-webkit-scrollbar {
+                    width: 8px;
+                    height: 30px;
+                    background-color: rgba(0, 0, 0, 0.65);
+                  }
+                
+                  &::-webkit-scrollbar-thumb {
+                    border-radius: 10px;
+                    background-color: #555;
+                  }
+             }
+         }
+         & .ant-btn-primary{
+             width: 97%;
+             border-radius: 10px;
+             margin-left: 7px;
+             background-color: #1890ff;
+         }
+    }
+}

@@ -93,15 +93,17 @@ const data = [
     src: 'https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png',
   },
 ]
-export default function UserChatComponent() {
+export default function UserChatComponent(props) {
+  const { setIsDisplayChat } = props
   return (
     <>
       <div className="UserChatContainer">
-        {/* <p>Contact Name</p> */}
         {data.map((value) => (
-          <div className="UserDisplay" key={value.id}>
-            <img src={value.src} alt="Cant not display" />
-            <span className="Username">{value.username}</span>
+          <div className="UserDisplay" key={value.id} onClick={() => setIsDisplayChat(true)}>
+            <div>
+              <img src={value.src} alt="Cant not display" />
+              <span className="Username">{value.username}</span>
+            </div>
           </div>
         ))}
       </div>

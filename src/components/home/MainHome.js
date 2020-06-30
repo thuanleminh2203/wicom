@@ -4,7 +4,8 @@ import NewsComponent from './component-in-home/NewsComponent'
 import UserChatComponent from './component/UserChatComponent'
 import { Row, Col } from 'antd'
 
-export default function MainHome() {
+export default function MainHome(props) {
+  const { setIsDisplayChat } = props
   return (
     <Fragment>
       <Row>
@@ -15,7 +16,7 @@ export default function MainHome() {
           <NewsComponent />
         </Col>
         <Col span={6}>
-          <UserChatComponent />
+          <UserChatComponent setIsDisplayChat={setIsDisplayChat} />
         </Col>
       </Row>
     </Fragment>
