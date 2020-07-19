@@ -1,4 +1,6 @@
-import React from 'react'
+import React , { useEffect } from 'react'
+import { ApiRequest } from '../../../constant/apiUtils'
+import axios from 'axios'
 
 const data = [
   {
@@ -93,7 +95,26 @@ const data = [
     src: 'https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png',
   },
 ]
+const varToken = 'eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ0aHVhbnBybzIiLCJleHAiOjE1OTQ5Njg5MDAsImlhdCI6MTU5NDk2MjkwMH0.S_SC2mqhjhNoo1_agHzv0wdfAAakEMD7eWUuhPs_LcIFelc8V2ldPJ0h20qLhAxTJDixuao2Vb-ReQpgvcF9pA'
+// const headers =  {
+//     // 'Content-Type': 'application/json',
+//     Authorization: 'Bearer ' + varToken
+//   }
+// const config = {
+  // const headers = { Authorization: `Bearer ${varToken}` }
+// };
+
+
+
 export default function UserChatComponent(props) {
+  useEffect(() => {
+    // const headers = { Authorization: `Bearer ${varToken}` }
+    ApiRequest.get('/find-all')
+    // console.log("=====jwt===" + headers)
+    // axios.get('http://localhost:8080/find-all', {headers})
+    // .then((res) => console.log("=====res==" + res))
+    // .catch((err) => console.log("====errr==" + err))
+  }, [])
   const { setIsDisplayChat } = props
   return (
     <>

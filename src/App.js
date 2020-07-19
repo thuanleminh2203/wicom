@@ -1,8 +1,10 @@
 import React from 'react'
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom'
 import Loadable from 'react-loadable'
+import { ToastContainer } from "react-toastify";
+import 'react-toastify/dist/ReactToastify.css'
 
-const Home = Loadable({
+const Home = Loadable({ 
   loader: () => import('./pages/Home'),
   loading: () => null,
 })
@@ -23,6 +25,20 @@ const MyPageComponent = Loadable({
 
 function App() {
   return (
+    <div>
+
+    <ToastContainer
+      position="top-right"
+      autoClose={5000}
+      hideProgressBar={false}
+      newestOnTop={false}
+      closeOnClick
+      rtl={false}
+      pauseOnFocusLoss
+      draggable
+      pauseOnHover
+    />
+
     <Router>
       <Switch>
         <Route exact path="/" component={Home} />
@@ -32,6 +48,7 @@ function App() {
         {/* <Route component={Error404} /> */}
       </Switch>
     </Router>
+    </div>
   )
 }
 

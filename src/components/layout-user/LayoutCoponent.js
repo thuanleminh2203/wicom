@@ -38,16 +38,14 @@ const src = 'https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png'
 
 const LayoutComponent = () => {
 
-  const [idSelect, setIdSelect] = useState('3')
+  const [idSelect, setIdSelect] = useState('1')
   const [isDisplayChat, setIsDisplayChat] = useState(true)
 
   useEffect(() => {
     return () => setIsDisplayChat(false)
   })
 
-  const [idSelect, setIdSelect] = useState('1')
-  const [isDislayChat, setIsDisplayChat] = useState(false)
-
+ 
   const switchBody = (key) => {
     switch (key) {
       case '1':
@@ -104,11 +102,8 @@ const LayoutComponent = () => {
           style={{ padding: '0px 0px 24px 0px', minHeight: 380 }}
         >
           {switchBody(idSelect)}
-<<<<<<< Updated upstream
-          {idSelect == '1' && isDisplayChat && <ChatComponent />}
-=======
-          {isDislayChat && <ChatComponent setIsDisplayChat={setIsDisplayChat} />}
->>>>>>> Stashed changes
+          {/* {idSelect == '1' && isDisplayChat && <ChatComponent />} */}
+          {isDisplayChat && <ChatComponent setIsDisplayChat={setIsDisplayChat} />}
         </div>
       </Content>
       <Footer style={{ textAlign: 'center' }}>Ant Design ©2018 Created by Ant UED</Footer>

@@ -4,43 +4,43 @@ import { Input } from 'antd'
 const { TextArea } = Input
 
 const InputComponents = (props) => {
-  const { type, isValidate, data, name } = props
-  const { setDataInput1, dataInput1 } = props
-  // const [dataInput, setDataInput] = useState(data)
-
-  //demo text area
+  const { type, isValidate , name } = props
+  const { min, max , style } = props
+  const { setDataInput, dataInput, value , err, setErr} = props
   function setValue(e) {
     const { target } = e
-    const { value, name } = target
-
-    if (isValidate) {
-      if (value.length > 10) {
+    const { value } = target
+    console.log(`repassword`, name, value.length)
+    if( isValidate ){
+      if (value.length < min || value.length > max) {
+        setErr({...err, [name] : `${name} phải lớn hơn ${min} và bé hơn ${max}`})
+        if(value.length === 0 )  setDataInput( { ...dataInput, [name] : value} )
         return
       }
-      setDataInput1({ ...data, [name]: value })
-    } else {
-      setDataInput1(value)
     }
-  }
+    setErr({})
+    setDataInput( { ...dataInput, [name] : value} )
+}
 
-  const siwtchComponent = (type) => {
-    const { min, max, isValidate, style } = props
-
+  const siwtchComponent = () => {
     switch (type) {
       case 'text':
         return (
+          <>
           <input
-            className="InputContainer"
+            className={`InputContainer ${err[name] && 'InputErr'}`}
             type={type}
             name={name}
             min={min}
             max={max}
             isValidate={isValidate}
             style={style}
-            onChange={(e) => setDataInput1(e)}
-            value={dataInput1}
+            onChange={(e) => setValue(e)}
+            value={value}
             autoComplete="off"
           />
+          { err[name] && <p className="ValidateInput">{err[name]}</p>}
+          </>
         )
       case 'textarea': {
         const { placeholder = '' } = props
@@ -49,15 +49,35 @@ const InputComponents = (props) => {
             style={style}
             placeholder={placeholder}
             autoSize
-            value={setDataInput1}
             onChange={(e) => setValue(e)}
           />
         )
       }
+
+      default : {
+        return (
+          <>
+          <input
+            className={`InputContainer ${err[name] && 'InputErr'}`}
+            type= {type}
+            name={name}
+            min={min}
+            max={max}
+            isValidate={isValidate}
+            style={style}
+            onChange={(e) => setValue(e)}
+            value={value}
+            autoComplete="off"
+        />
+        { err[name] && <p className="ValidateInput">{err[name]}</p>}
+        </>
+      )
+      }
+
     }
   }
 
-  return <div className="ImputComponentsContainer">{siwtchComponent(type)}</div>
+  return <div className="ImputComponentsContainer">{siwtchComponent()}</div>
 }
 
 export default InputComponents
