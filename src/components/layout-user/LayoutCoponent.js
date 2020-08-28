@@ -39,11 +39,11 @@ const src = 'https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png'
 const LayoutComponent = () => {
 
   const [idSelect, setIdSelect] = useState('1')
-  const [isDisplayChat, setIsDisplayChat] = useState(true)
+  const [isDisplayChat, setIsDisplayChat] = useState(null)
 
-  useEffect(() => {
-    return () => setIsDisplayChat(false)
-  })
+  // useEffect(() => {
+  //   return () => setIsDisplayChat(false)
+  // })
 
  
   const switchBody = (key) => {
@@ -103,10 +103,9 @@ const LayoutComponent = () => {
         >
           {switchBody(idSelect)}
           {/* {idSelect == '1' && isDisplayChat && <ChatComponent />} */}
-          {isDisplayChat && <ChatComponent setIsDisplayChat={setIsDisplayChat} />}
+          {isDisplayChat && <ChatComponent setIsDisplayChat={setIsDisplayChat} isDisplayChat={isDisplayChat} />}
         </div>
       </Content>
-      <Footer style={{ textAlign: 'center' }}>Ant Design ©2018 Created by Ant UED</Footer>
     </Layout>
   )
 }

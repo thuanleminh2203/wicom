@@ -8,12 +8,13 @@ function SockJSClient(props){
     // stompClient = Stomp.over(socket)
     // const [stompClient,setStompClient] = useState(Stomp.over(socket))
     let stompClient = null
+    console.log(`username`, props.username );
     useEffect(() => {
         connect()
         // return () => {
         //     stompClient.disconnect()
         // }
-    }, [])
+    }, [props.username])
 
     function connect(){
         const refreshToken ='eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ0aHVhbnBybzIiLCJleHAiOjE1OTQ4Nzk0ODQsImlhdCI6MTU5NDg3MzQ4NH0.Xb0CQg7Tx5cVJi4pczp6GM7VWyiAkuJbsOSr-th2iPGhjyIiBdjkz9POVMrjaXaL1iNTtrNw6tmXcqVQ8chKrw'
@@ -21,20 +22,11 @@ function SockJSClient(props){
             Authorization: `Bearer ${refreshToken}`,
           }
     //    const headers = { 'Authorization' : 'Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ0aHVhbnBybzIiLCJleHAiOjE1OTQ4Nzk0ODQsImlhdCI6MTU5NDg3MzQ4NH0.Xb0CQg7Tx5cVJi4pczp6GM7VWyiAkuJbsOSr-th2iPGhjyIiBdjkz9POVMrjaXaL1iNTtrNw6tmXcqVQ8chKrw'}
-        let socket = new SockJS('http://localhost:8080/secured/chat')
+        let socket = new SockJS('http://localhost:8080/chat')
         stompClient = Stomp.over(socket)
-
-        let sessionId = "";
         stompClient.debug = () => {} 
-        stompClient.connect( headers, (frame) => {
-            // let url = stompClient.ws._transport.url
-            // url = url.replace(
-            //     "http://localhost:8080/secured/chat",  "")
-            // url = url.replace("/websocket", "")
-            // url = url.replace(/^[0-9]+\//, "")
-            // console.log("Your current session is: " + url)
-            // sessionId = url;
-            const username = "thuanlm"
+        stompClient.connect( {}, (frame) => {
+            // const username = "thuanlm"
             console.log('Connected: ' + frame)
             stompClient.subscribe('/topic/thuanlm'  ,  (mess) => {
                 console.log('====mess==' + mess)

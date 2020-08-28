@@ -1,9 +1,13 @@
-import React, { useState } from 'react'
+import React, { useState , useEffect} from 'react'
 import { ArrowLeftOutlined } from '@ant-design/icons'
 import { Link } from 'react-router-dom'
 import  InputComponents  from '../../components-utils/InputComponent'
 import { ApiRequest } from '../../constant/apiUtils'
 import { toast } from "react-toastify";
+import {
+  useHistory,
+  useLocation
+} from "react-router-dom";
 
 const FormLogin = () => {
   const [dataInput,setDataInput] = useState({username:'',password: '', confirmPassword: ''})
@@ -11,6 +15,8 @@ const FormLogin = () => {
   const [err,setErr] = useState({})
   const [isLogin, setIsLogin] = useState(true)
   const [isForget, setIsForget] = useState(false)
+  let history = useHistory();
+  let location = useLocation();
 
   async function onSubmit(){
     if(!username.length){
@@ -34,14 +40,12 @@ const FormLogin = () => {
         const { data : body = {} } = data
         const { token = '' } = body
         localStorage.setItem("token" , token)
-        console.log("====errr==" , res)
+        history.push('/home')
       }).catch((err) => {
         const { response = {} } = err
         const { data = {} } = response
         const { mess = '' } = data
-        console.log("====errr==" , err.response)
         toast.error(mess)
-      
       }
       )
   }

@@ -2,6 +2,7 @@ import React from 'react'
 import InputComponents from './../../../components-utils/InputComponent'
 import { SendOutlined, CloseOutlined } from '@ant-design/icons'
 import { Row, Col } from 'antd'
+import SockJSClient from '../../../socket'
 const data = {
   id: 16,
   username: 'Thuan Le Minh',
@@ -9,16 +10,19 @@ const data = {
 }
 
 export default function ChatComponent(props) {
-  const { setIsDisplayChat } = props
+  const { setIsDisplayChat, isDisplayChat } = props
+  const { username } = isDisplayChat
 
   return (
+    <>
+    <SockJSClient username = {username}/>
     <div className="ChatContainer">
       <div className="ChatHeader">
         <img src={data.src} alt="Cant not display" />
-        <span className="Username">{data.username}</span>
+        <span className="Username">{isDisplayChat.fullname}</span>
         <CloseOutlined
           style={{ fontSize: '16px', color: '#fff', paddingLeft: '173px' }}
-          onClick={() => setIsDisplayChat(false)}
+          onClick={() => setIsDisplayChat(null)}
         />
       </div>
       <hr className="LineContainer" />
@@ -60,5 +64,6 @@ export default function ChatComponent(props) {
         </Col>
       </Row>
     </div>
+    </>
   )
 }
