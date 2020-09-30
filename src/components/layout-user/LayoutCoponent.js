@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState } from 'react'
 import { Layout, Menu, Avatar } from 'antd'
 import {
   HomeOutlined,
@@ -33,19 +33,17 @@ const data = [
     component: <UserOutlined style={{ fontSize: '28px' }} />,
   },
 ]
-const { Header, Content, Footer } = Layout
+const { Header, Content } = Layout
 const src = 'https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png'
 
 const LayoutComponent = () => {
-
-  const [idSelect, setIdSelect] = useState('1')
+  const [idSelect, setIdSelect] = useState('3')
   const [isDisplayChat, setIsDisplayChat] = useState(null)
 
   // useEffect(() => {
   //   return () => setIsDisplayChat(false)
   // })
 
- 
   const switchBody = (key) => {
     switch (key) {
       case '1':
@@ -97,13 +95,12 @@ const LayoutComponent = () => {
         </div>
       </Header>
       <Content className="site-layout" style={{ marginTop: 64, backgroundColor: '#18191a' }}>
-        <div
-          className="site-layout-background"
-          style={{ padding: '0px 0px 24px 0px', minHeight: 380 }}
-        >
+        <div className="site-layout-background" style={{ minHeight: 380 }}>
           {switchBody(idSelect)}
           {/* {idSelect == '1' && isDisplayChat && <ChatComponent />} */}
-          {isDisplayChat && <ChatComponent setIsDisplayChat={setIsDisplayChat} isDisplayChat={isDisplayChat} />}
+          {isDisplayChat && (
+            <ChatComponent setIsDisplayChat={setIsDisplayChat} isDisplayChat={isDisplayChat} />
+          )}
         </div>
       </Content>
     </Layout>

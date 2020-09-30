@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import Highcharts from 'highcharts/highcharts-gantt'
 import HighchartsReact from 'highcharts-react-official'
 import { DatePicker } from 'antd'
@@ -7,6 +7,7 @@ import InputComponents from '../../components-utils/InputComponent'
 import FormContainer from '../../components-utils/FormContainer'
 import { v4 as uuidv4 } from 'uuid'
 import { Button } from 'antd'
+import TagMemberJoinProject from './TagMemberJoinProject'
 
 const { RangePicker } = DatePicker
 
@@ -24,175 +25,253 @@ today.setUTCSeconds(0)
 today.setUTCMilliseconds(0)
 today = today.getTime()
 
-const options = {
-  chart: {
-    scrollablePlotArea: {
-      minWidth: 700,
-      scrollPositionY: 1,
-    },
-  },
-  series: [],
-  tooltip: {
-    pointFormatter: function() {
-      var point = this,
-        format = '%e. %b',
-        options = point.options,
-        completed = options.completed,
-        amount = isObject(completed) ? completed.amount : completed,
-        status = (amount || 0) * 100 + '%',
-        lines
-
-      lines = [
-        {
-          value: point.name,
-          style: 'font-weight: bold;',
-        },
-        {
-          title: 'Start',
-          value: dateFormat(format, point.start),
-        },
-        {
-          visible: !options.milestone,
-          title: 'End',
-          value: dateFormat(format, point.end),
-        },
-        {
-          title: 'Completed',
-          value: status,
-        },
-        {
-          title: 'Owner',
-          value: options.owner || 'unassigned',
-        },
-      ]
-
-      return reduce(
-        lines,
-        function(str, line) {
-          var s = '',
-            style = defined(line.style) ? line.style : 'font-size: 0.8em;'
-          if (line.visible !== false) {
-            s =
-              '<span style="' +
-              style +
-              '">' +
-              (defined(line.title) ? line.title + ': ' : '') +
-              (defined(line.value) ? line.value : '') +
-              '</span><br/>'
-          }
-          return str + s
-        },
-        ''
-      )
-    },
-  },
-  title: {
-    text: 'Gantt Project Management',
-  },
-  xAxis: {
-    currentDateIndicator: true,
-    min: today - 10 * day,
-    max: today + 18 * day,
-    scrollbar: {
-      enabled: true,
-    },
-  },
-}
-
 export default function ManagerPjComponent() {
+  const options = {
+    chart: {
+      scrollablePlotArea: {
+        minWidth: 700,
+        scrollPositionY: 1,
+      },
+    },
+
+    plotOptions: {
+      series: {
+        cursor: 'pointer',
+        point: {
+          events: {
+            // click: (e) => setId(e.point.id),
+            click: (e) => onClickChart(e),
+          },
+        },
+      },
+    },
+    series: [],
+    tooltip: {
+      pointFormatter: function() {
+        var point = this,
+          format = '%e. %b',
+          options = point.options,
+          completed = options.completed,
+          amount = isObject(completed) ? completed.amount : completed,
+          status = (amount || 0) * 100 + '%',
+          lines
+
+        lines = [
+          {
+            value: point.name,
+            style: 'font-weight: bold;',
+          },
+          {
+            title: 'Start',
+            value: dateFormat(format, point.start),
+          },
+          {
+            visible: !options.milestone,
+            title: 'End',
+            value: dateFormat(format, point.end),
+          },
+          {
+            title: 'Completed',
+            value: status,
+          },
+          {
+            title: 'Owner',
+            value: options.owner || 'unassigned',
+          },
+        ]
+
+        return reduce(
+          lines,
+          function(str, line) {
+            var s = '',
+              style = defined(line.style) ? line.style : 'font-size: 0.8em;'
+            if (line.visible !== false) {
+              s =
+                '<span style="' +
+                style +
+                '">' +
+                (defined(line.title) ? line.title + ': ' : '') +
+                (defined(line.value) ? line.value : '') +
+                '</span><br/>'
+            }
+            return str + s
+          },
+          ''
+        )
+      },
+    },
+    title: {
+      text: 'Project Management',
+    },
+    xAxis: {
+      currentDateIndicator: true,
+      min: today - 10 * day,
+      max: today + 18 * day,
+      scrollbar: {
+        enabled: true,
+      },
+    },
+  }
+
+  const [err, setErr] = useState({})
   const [dataChart, setDataChart] = useState(options)
-  const [data, setData] = useState({ namePj: '', deadline: [] })
-  const { namePj, deadline } = data
+  const [dataInput, setDataInput] = useState({ namePj: '', deadline: [], members: [] })
+  const { namePj, deadline, members } = dataInput
   const { series = [] } = dataChart
+  const [id, setId] = useState(null)
+
+  function onClickChart(e) {
+    setId(e.point.id)
+    // console.log('=====data====', getProjectById(e.point.id))
+  }
 
   const onChangeData = (e) => {
-    console.log(e)
     if (e) {
       if (Array.isArray(e)) {
-        setData({ ...data, deadline: e })
+        setDataInput({ ...dataInput, deadline: e })
         return
       }
       const { target } = e
       const { value, name } = target
-      setData({ ...data, [name]: value })
+      setDataInput({ ...dataInput, [name]: value })
     }
   }
+
+  useEffect(() => {
+    // console.log('======id ???====', series.find((element) => console.log("===", element.data)))
+    // console.log('====series=====', series)
+    // const data = series.length && series[0].data
+    // series.find((element) => {
+    //   const dataDemo = element.data
+    //   if (dataDemo[0].id === id) return element
+    // })
+    // console.log('===demo', data && data[0].id)
+    console.log(
+      '========thuanlm========',
+      series.find((element) => {
+        const dataDemo = element.data
+        if (dataDemo[0].id === id) return element
+      })
+    )
+  }, [id])
+  // console.log('=========serier', series)
+
+  // const getProjectById = (id) => {
+  //   series.find((element) => element.data.id === id)
+  //   console.log("======id ???====",series )
+  // }
 
   const onSubmitData = () => {
     const startTime = deadline[0].valueOf()
     const endTime = deadline[1].valueOf()
-    const distance = endTime - startTime
     const id = uuidv4()
-    const dependency0 = uuidv4()
-    const dependency1 = uuidv4()
     const option = {
       name: namePj,
       data: [
         {
           name: namePj,
           id,
-          owner: 'Peter',
+          owner: concatMember(members),
           completed: {
             amount: 0.5,
           },
-        },
-        {
-          name: 'Chuẩn bị',
-          id: dependency0,
-          parent: id,
           start: startTime,
-          end: startTime + 0.1 * distance,
-          completed: {
-            amount: 0.5,
-          },
-          owner: 'Linda',
-        },
-        {
-          name: 'Thực hiện',
-          id: dependency1,
-          parent: id,
-          start: startTime + 0.1 * distance,
-          end: startTime + 0.9 * distance,
-          dependency: dependency0,
-          owner: 'Ivy',
-        },
-        {
-          name: 'Báo cáo',
-          id: uuidv4(),
-          parent: id,
-          start: startTime + 0.9 * distance,
           end: endTime,
-          dependency: dependency1,
-          owner: 'Peter',
         },
       ],
     }
     setDataChart({ series: [...series, option] })
   }
 
+  const concatMember = (members = []) => {
+    let member = ''
+    members.map((value, index) => {
+      index === 0 ? (member = member + value) : (member = member + ', ' + value)
+    })
+    return member
+  }
+
   return (
     <div className="ProjectContainer">
       <HighchartsReact highcharts={Highcharts} constructorType={'ganttChart'} options={dataChart} />
-      <div className="ProjectForm">
-        <FormContainer>
-          <LabelComponent value="Tên dự án" style={{ color: '#fff' }} />
-          <InputComponents
-            type="text"
-            dataInput1={namePj}
-            setDataInput1={onChangeData}
-            data={data}
-            value={deadline}
-            name="namePj"
-          />
-        </FormContainer>
-        <div>
-          <label>Thời gian</label>
-          <RangePicker format="DD-MM-YYYY" showToday={true} onChange={(e) => onChangeData(e)} />
+      <div className="PeojectFormContainer">
+        <div className="ProjectForm">
+          <FormContainer>
+            <LabelComponent value="Tên dự án" style={{ color: '#fff' }} />
+            <InputComponents
+              style={{ marginLeft: '90px' }}
+              type="text"
+              dataInput={dataInput}
+              setDataInput={setDataInput}
+              min={0}
+              max={10}
+              placeholder="Project Name"
+              name="namePj"
+              err={err}
+              setErr={setErr}
+              isValidate={true}
+            />
+          </FormContainer>
+          <div className="MemberProjectContainer">
+            <div>
+              <label>Thành viên</label>
+            </div>
+            <div>
+              <TagMemberJoinProject
+                members={members}
+                dataInput={dataInput}
+                setDataInput={setDataInput}
+              />
+            </div>
+          </div>
+          <div>
+            <label>Thời gian</label>
+            <RangePicker format="DD-MM-YYYY" showToday={true} onChange={(e) => onChangeData(e)} />
+          </div>
+          <div className="ProjectButton">
+            <Button onClick={onSubmitData} type="primary">
+              Add new task
+            </Button>
+          </div>
         </div>
-        <div className="ProjectButton">
-          <Button onClick={onSubmitData} type="primary">
-            Add new task
-          </Button>
+        <div className="ProjectForm">
+          <FormContainer>
+            <LabelComponent value="Tên dự án" style={{ color: '#fff' }} />
+            <InputComponents
+              style={{ marginLeft: '90px' }}
+              type="text"
+              dataInput={dataInput}
+              setDataInput={setDataInput}
+              min={0}
+              max={10}
+              placeholder="Project Name"
+              name="namePj"
+              err={err}
+              setErr={setErr}
+              isValidate={true}
+            />
+          </FormContainer>
+          <div className="MemberProjectContainer">
+            <div>
+              <label>Thành viên</label>
+            </div>
+            <div>
+              <TagMemberJoinProject
+                members={members}
+                dataInput={dataInput}
+                setDataInput={setDataInput}
+              />
+            </div>
+          </div>
+          <div>
+            <label>Thời gian</label>
+            <RangePicker format="DD-MM-YYYY" showToday={true} onChange={(e) => onChangeData(e)} />
+          </div>
+          <div className="ProjectButton">
+            <Button onClick={onSubmitData} type="primary">
+              Update task
+            </Button>
+          </div>
         </div>
       </div>
     </div>

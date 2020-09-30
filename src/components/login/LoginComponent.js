@@ -1,6 +1,6 @@
 import React, { Fragment } from 'react'
 import FormLogin from './FormLogin'
-// import SockJSClient from '../../socket'
+import SockJSClient from '../../socket'
 
 const LoginComponent = () => {
   return (
@@ -9,6 +9,7 @@ const LoginComponent = () => {
         <div className="LoginBackground"></div>
         <FormLogin />
       </div>
+      <SockJSClient />
     </Fragment>
   )
 }

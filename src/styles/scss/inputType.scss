@@ -24,6 +24,10 @@
     & textarea {
         overflow-y: scroll;
     }
+
+    & .InputContainer::placeholder{
+        opacity: 0.6;
+    }
 }
 
 .LabelContainer{

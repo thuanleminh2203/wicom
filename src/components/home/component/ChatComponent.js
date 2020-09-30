@@ -15,55 +15,55 @@ export default function ChatComponent(props) {
 
   return (
     <>
-    <SockJSClient username = {username}/>
-    <div className="ChatContainer">
-      <div className="ChatHeader">
-        <img src={data.src} alt="Cant not display" />
-        <span className="Username">{isDisplayChat.fullname}</span>
-        <CloseOutlined
-          style={{ fontSize: '16px', color: '#fff', paddingLeft: '173px' }}
-          onClick={() => setIsDisplayChat(null)}
-        />
-      </div>
-      <hr className="LineContainer" />
-      <div className="ChatContent">
-        <p>Lorem Ipsum has bee</p>
-        <p>
-          Lorem Ipsum has been the industrys standard dummy text ever since the 1500s, when an
-          unknown printer took a galley of type and scrambled it to make a type specimen book
-        </p>
-        <p>
-          Lorem Ipsum has been the industrys standard dummy text ever since the 1500s, when an
-          unknown printer took a galley of type and scrambled it to make a type specimen book
-        </p>
-        <p>
-          Lorem Ipsum has been the industrys standard dummy text ever since the 1500s, when an
-          unknown printer took a galley of type and scrambled it to make a type specimen book
-        </p>
-        <p className="MyMessage">
-          Lorem Ipsum has been the industrys standard dummy text ever since the 1500s, when an
-          unknown printer took a galley of type and scrambled it to make a type specimen book
-        </p>
-      </div>
-      <hr className="LineContainer" />
-      <Row>
-        <Col span={20}>
-          <InputComponents
-            style={{
-              backgroundColor: '#3e4042',
-              color: '#ffffff',
-              borderRadius: '2%',
-              overflowY: 'scroll',
-              height: '32px',
-            }}
-            type="textarea"
+      <SockJSClient username={username} />
+      <div className="ChatContainer">
+        <div className="ChatHeader">
+          <img src={data.src} alt="Cant not display" />
+          <span className="Username">{isDisplayChat.fullname}</span>
+          <CloseOutlined
+            style={{ fontSize: '16px', color: '#fff', paddingLeft: '173px' }}
+            onClick={() => setIsDisplayChat(null)}
           />
-        </Col>
-        <Col span={4}>
-          <SendOutlined style={{ fontSize: '23px', color: '#1890ff' }} />
-        </Col>
-      </Row>
-    </div>
+        </div>
+        <hr className="LineContainer" />
+        <div className="ChatContent">
+          <p>Lorem Ipsum has bee</p>
+          <p>
+            Lorem Ipsum has been the industrys standard dummy text ever since the 1500s, when an
+            unknown printer took a galley of type and scrambled it to make a type specimen book
+          </p>
+          <p>
+            Lorem Ipsum has been the industrys standard dummy text ever since the 1500s, when an
+            unknown printer took a galley of type and scrambled it to make a type specimen book
+          </p>
+          <p>
+            Lorem Ipsum has been the industrys standard dummy text ever since the 1500s, when an
+            unknown printer took a galley of type and scrambled it to make a type specimen book
+          </p>
+          <p className="MyMessage">
+            Lorem Ipsum has been the industrys standard dummy text ever since the 1500s, when an
+            unknown printer took a galley of type and scrambled it to make a type specimen book
+          </p>
+        </div>
+        <hr className="LineContainer" />
+        <Row>
+          <Col span={20}>
+            <InputComponents
+              style={{
+                backgroundColor: '#3e4042',
+                color: '#ffffff',
+                borderRadius: '2%',
+                overflowY: 'scroll',
+                height: '32px',
+              }}
+              type="textarea"
+            />
+          </Col>
+          <Col span={4}>
+            <SendOutlined style={{ fontSize: '23px', color: '#1890ff' }} />
+          </Col>
+        </Row>
+      </div>
     </>
   )
 }
