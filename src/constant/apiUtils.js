@@ -22,3 +22,12 @@ ApiRequest.get = (url, params = {}) => {
 ApiRequest.post = (url, data = {}) => {
   return axios.post(url, data)
 }
+
+// ApiRequest.post = (url, data = {}) => {
+//   axios
+//     .post(url, data)
+//     .then((response) => {
+//       console.log('====response====', response)
+//     })
+//     .catch((err) => console.log('===have err==== ', err))
+// }

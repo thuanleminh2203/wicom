@@ -8,6 +8,8 @@ import FormContainer from '../../components-utils/FormContainer'
 import { v4 as uuidv4 } from 'uuid'
 import { Button } from 'antd'
 import TagMemberJoinProject from './TagMemberJoinProject'
+import { ApiRequest } from '../../constant/apiUtils'
+import moment from 'moment'
 
 const { RangePicker } = DatePicker
 
@@ -146,41 +148,112 @@ export default function ManagerPjComponent() {
     //   if (dataDemo[0].id === id) return element
     // })
     // console.log('===demo', data && data[0].id)
-    console.log(
-      '========thuanlm========',
-      series.find((element) => {
-        const dataDemo = element.data
-        if (dataDemo[0].id === id) return element
-      })
-    )
+    // console.log(
+    //   '========thuanlm========',
+    series.find((element) => {
+      const dataDemo = element.data
+      if (dataDemo[0].id === id) {
+        const data = JSON.stringify(element)
+        console.log('=========data string ====', data)
+        console.log('=========data object ====', JSON.parse(data))
+
+        return JSON.stringify(element)
+      }
+    })
+    // )
   }, [id])
-  // console.log('=========serier', series)
+
+  useEffect(() => {
+    getLstProject()
+  }, [])
+
+  useEffect(() => {
+    console.log('====???????????=========', dataChart)
+  }, [dataChart])
+
+  async function getLstProject() {
+    await ApiRequest.get('/project')
+      .then((res) => {
+        const { data = {} } = res
+        const { data: body = [] } = data
+
+        console.log('====list res===', body)
+        if (body.length > 0) {
+          body.forEach((e) => {
+            const demo = moment(e.startTime)
+              .tz('Europe/Paris')
+              .format()
+            console.log('===date===', demo)
+            const res = {
+              id: e.projectId,
+              name: e.projectName,
+              data: [
+                {
+                  name: e.projectName,
+                  id: e.projectId,
+                  owner: e.owner,
+                  completed: {
+                    amount: e.completed / 100,
+                  },
+                  start: e.startTime,
+                  end: e.endTime,
+                },
+              ],
+            }
+            console.log('====data resss===', res)
+            setDataChart({ series: [...series, res] })
+          })
+        }
+      })
+      .catch((err) => {
+        console.log('====error===', err)
+      })
+  }
+  // console.log('=========serier', JSON.stringify(series))
 
   // const getProjectById = (id) => {
   //   series.find((element) => element.data.id === id)
   //   console.log("======id ???====",series )
   // }
 
-  const onSubmitData = () => {
+  const onSubmitData = async () => {
     const startTime = deadline[0].valueOf()
     const endTime = deadline[1].valueOf()
-    const id = uuidv4()
-    const option = {
-      name: namePj,
-      data: [
-        {
+    // const id = uuidv4()
+    // const id = new Date().getTime()
+
+    await ApiRequest.post('/project', {
+      projectId: null,
+      projectName: namePj,
+      owner: concatMember(members),
+      completed: 50,
+      startTime: moment(startTime).format('DD-MM-YYYY'),
+      endTime: moment(endTime).format('DD-MM-YYYY'),
+    })
+      .then((res) => {
+        const { data = {} } = res
+        const { data: body = {} } = data
+        const option = {
+          id: body.projectId,
           name: namePj,
-          id,
-          owner: concatMember(members),
-          completed: {
-            amount: 0.5,
-          },
-          start: startTime,
-          end: endTime,
-        },
-      ],
-    }
-    setDataChart({ series: [...series, option] })
+          data: [
+            {
+              name: namePj,
+              id: body.projectId,
+              owner: concatMember(members),
+              completed: {
+                amount: 0.5,
+              },
+              start: startTime,
+              end: endTime,
+            },
+          ],
+        }
+        setDataChart({ series: [...series, option] })
+      })
+      .catch((err) => {
+        console.log('====error===', err)
+      })
   }
 
   const concatMember = (members = []) => {

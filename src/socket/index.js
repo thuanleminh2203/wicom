@@ -17,26 +17,36 @@ function SockJSClient(props) {
     // }
   }, [props.username])
   let sessionId = ''
+  // let username = 
 
   function connect() {
     const socket = new SockJS('http://localhost:8080/secured/room')
     stompClient = Stomp.over(socket)
-    stompClient.debug = () => {}
+    // stompClient.debug = () => {}
 
     stompClient.connect(
       {},
       (frame) => {
         console.log('Connected: ' + frame)
         let url = stompClient.ws._transport.url
-        url = url.replace('/websocket', '')
+        url = url.replace('ws://localhost:8080/secured/room/', '')
         url = url.replace(/^[0-9]+\//, '')
-        url = url.replace('ws://localhost:8080', '')
+        url = url.replace('/websocket', '')
         sessionId = url
         console.log('Your current session is: ' + sessionId)
+        console.log('subbbbbbbb===', '/secured/user/queue/specific-user' + '-user' + sessionId)
+        // var url = stompClient.ws._transport.url
+        // url = url.replace('ws://localhost:8080/spring-security-mvc-socket/secured/room/', '')
+        // url = url.replace('/websocket', '')
+        // url = url.replace(/^[0-9]+\//, '')
+        // console.log('Your current session is: ' + url)
+        // sessionId = url
+
+        // console.log('/secured/user/queue/specific-user/' + sessionId)
         // /secured/user/queue/specific-user/c3nj1di0
-        stompClient.subscribe('/secured/user/queue/specific-user/' + sessionId, (mess) =>
+        stompClient.subscribe('/user/sonbeo/specific-user' + '-user' + sessionId, (mess) =>
           // /secured/user/queue/specific-user
-          console.log('====mess==' + mess)
+          console.log('====mess==')
         )
       },
       (err) => console.log('======errr====', err)
