@@ -9,7 +9,7 @@ const LoginComponent = () => {
         <div className="LoginBackground"></div>
         <FormLogin />
       </div>
-      <SockJSClient />
+      {/* <SockJSClient /> */}
     </Fragment>
   )
 }

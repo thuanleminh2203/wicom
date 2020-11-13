@@ -75,30 +75,26 @@ const InputComponents = (props) => {
         )
       }
 
-      // case 'number': {
-      //   const { placeholder = '' } = props
-      //   return <input style={style} placeholder={placeholder} onChange={(e) => setValue(e)} />
-      // }
-
-      // default: {
-      //   return (
-      //     <>
-      //       <input
-      //         className={`InputContainer ${err[name] && 'InputErr'}`}
-      //         type={type}
-      //         name={name}
-      //         min={min}
-      //         max={max}
-      //         isValidate={isValidate}
-      //         style={style}
-      //         onChange={(e) => setValue(e)}
-      //         value={value}
-      //         autoComplete="off"
-      //       />
-      //       {err[name] && <p className="ValidateInput">{err[name]}</p>}
-      //     </>
-      //   )
-      // }
+      default: {
+        return (
+          <>
+            <input
+              className={`InputContainer ${err[name] && 'InputErr'}`}
+              type={type}
+              name={name}
+              min={min}
+              max={max}
+              isValidate={isValidate}
+              style={style}
+              onChange={(e) => setValue(e)}
+              value={valueProps}
+              autoComplete="off"
+              placeholder={placeholder}
+            />
+            {err[name] && <p className="ValidateInput">{err[name]}</p>}
+          </>
+        )
+      }
     }
   }
 
