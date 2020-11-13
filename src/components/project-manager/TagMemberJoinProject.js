@@ -14,7 +14,6 @@ export default function TagMemberJoinProject(props) {
   })
 
   const [options, setOptions] = useState([])
-  //   console.log('=========option', options)
 
   const { tags, inputVisible, inputValue, editInputIndex, editInputValue } = state
 
@@ -152,7 +151,7 @@ export default function TagMemberJoinProject(props) {
       )}
       {!inputVisible && (
         <Tag className="site-tag-plus" onClick={showInput}>
-          <PlusOutlined /> New Tag
+          <PlusOutlined /> Add member
         </Tag>
       )}
     </Fragment>

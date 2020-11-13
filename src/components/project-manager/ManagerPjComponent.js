@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import Highcharts from 'highcharts/highcharts-gantt'
 import HighchartsReact from 'highcharts-react-official'
-import { DatePicker } from 'antd'
+import { DatePicker,Col } from 'antd'
 import LabelComponent from '../../components-utils/LabelComponent'
 import InputComponents from '../../components-utils/InputComponent'
 import FormContainer from '../../components-utils/FormContainer'
@@ -30,12 +30,29 @@ today = today.getTime()
 export default function ManagerPjComponent() {
   const options = {
     chart: {
-      scrollablePlotArea: {
-        minWidth: 700,
-        scrollPositionY: 1,
-      },
+      // scrollablePlotArea: {
+        minHeight: 600,
+      //   scrollPositionY: 1,
+      // },
+      // width: 700,
+      // height: 500,
+      maxHeight: 900
     },
-
+    responsive: {
+      rules: [{
+          condition: {
+            minHeight: 500
+          },
+      }]
+  },
+    // maintainAspectRatio: false,
+    // scales: {
+    //     yAxes: [{
+    //         ticks: {
+    //             beginAtZero:true
+    //         }
+    //     }]
+    // },
     plotOptions: {
       series: {
         cursor: 'pointer',
@@ -47,7 +64,7 @@ export default function ManagerPjComponent() {
         },
       },
     },
-    series: [],
+    series: [{}],
     tooltip: {
       pointFormatter: function() {
         var point = this,
@@ -139,29 +156,29 @@ export default function ManagerPjComponent() {
     }
   }
 
-  useEffect(() => {
-    // console.log('======id ???====', series.find((element) => console.log("===", element.data)))
-    // console.log('====series=====', series)
-    // const data = series.length && series[0].data
-    // series.find((element) => {
-    //   const dataDemo = element.data
-    //   if (dataDemo[0].id === id) return element
-    // })
-    // console.log('===demo', data && data[0].id)
-    // console.log(
-    //   '========thuanlm========',
-    series.find((element) => {
-      const dataDemo = element.data
-      if (dataDemo[0].id === id) {
-        const data = JSON.stringify(element)
-        console.log('=========data string ====', data)
-        console.log('=========data object ====', JSON.parse(data))
+  // useEffect(() => {
+  //   // console.log('======id ???====', series.find((element) => console.log("===", element.data)))
+  //   // console.log('====series=====', series)
+  //   // const data = series.length && series[0].data
+  //   // series.find((element) => {
+  //   //   const dataDemo = element.data
+  //   //   if (dataDemo[0].id === id) return element
+  //   // })
+  //   // console.log('===demo', data && data[0].id)
+  //   // console.log(
+  //   //   '========thuanlm========',
+  //   series.find((element) => {
+  //     const dataDemo = element.data
+  //     if (dataDemo[0].id === id) {
+  //       const data = JSON.stringify(element)
+  //       console.log('=========data string ====', data)
+  //       console.log('=========data object ====', JSON.parse(data))
 
-        return JSON.stringify(element)
-      }
-    })
-    // )
-  }, [id])
+  //       return JSON.stringify(element)
+  //     }
+  //   })
+  //   // )
+  // }, [id])
 
   useEffect(() => {
     getLstProject()
@@ -177,14 +194,12 @@ export default function ManagerPjComponent() {
         const { data = {} } = res
         const { data: body = [] } = data
 
-        console.log('====list res===', body)
+        // console.log('====list res===', body)
         if (body.length > 0) {
+          const result = []
           body.forEach((e) => {
-            const demo = moment(e.startTime)
-              .tz('Europe/Paris')
-              .format()
-            console.log('===date===', demo)
-            const res = {
+            // console.log('starttime==========',moment(e.endTime,"DD-MM-YYYY").valueOf())
+            const dataChart = {
               id: e.projectId,
               name: e.projectName,
               data: [
@@ -195,14 +210,15 @@ export default function ManagerPjComponent() {
                   completed: {
                     amount: e.completed / 100,
                   },
-                  start: e.startTime,
-                  end: e.endTime,
+                  start: moment(e.startTime,"DD-MM-YYYY").valueOf(),
+                  end:  moment(e.endTime,"DD-MM-YYYY").valueOf()
                 },
               ],
             }
-            console.log('====data resss===', res)
-            setDataChart({ series: [...series, res] })
+            result.push(dataChart)
+            console.log('====data resss===', result)
           })
+          setDataChart({ series: result })
         }
       })
       .catch((err) => {
@@ -266,13 +282,15 @@ export default function ManagerPjComponent() {
 
   return (
     <div className="ProjectContainer">
-      <HighchartsReact highcharts={Highcharts} constructorType={'ganttChart'} options={dataChart} />
+      <div className="HighchartContainer">
+        <HighchartsReact highcharts={Highcharts} constructorType={'ganttChart'} options={dataChart} />
+
+      </div>
       <div className="PeojectFormContainer">
         <div className="ProjectForm">
-          <FormContainer>
+          <FormContainer classNameCustome="PaddingTop" justify="start">
             <LabelComponent value="Tên dự án" style={{ color: '#fff' }} />
             <InputComponents
-              style={{ marginLeft: '90px' }}
               type="text"
               dataInput={dataInput}
               setDataInput={setDataInput}
@@ -285,64 +303,42 @@ export default function ManagerPjComponent() {
               isValidate={true}
             />
           </FormContainer>
-          <div className="MemberProjectContainer">
-            <div>
-              <label>Thành viên</label>
-            </div>
-            <div>
-              <TagMemberJoinProject
-                members={members}
-                dataInput={dataInput}
-                setDataInput={setDataInput}
-              />
-            </div>
-          </div>
-          <div>
-            <label>Thời gian</label>
-            <RangePicker format="DD-MM-YYYY" showToday={true} onChange={(e) => onChangeData(e)} />
-          </div>
+          <FormContainer classNameCustome="PaddingTop" justify="start">
+            <LabelComponent value="Tiến độ" style={{ color: '#fff' }}  />
+            <InputComponents
+              type="text"
+              dataInput={dataInput}
+              setDataInput={setDataInput}
+              min={0}
+              max={10}
+              placeholder="Progress"
+              name="progress"
+              err={err}
+              setErr={setErr}
+              isValidate={true}
+            />
+          </FormContainer>
+          <FormContainer classNameCustome="PaddingTop" justify="start">
+              <LabelComponent value="Thời gian" style={{ color: '#fff' }}  />
+              <Col span={16} gutter={8}>
+                 <RangePicker format="DD-MM-YYYY" showToday={true} onChange={(e) => onChangeData(e)} />
+              </Col>
+          </FormContainer>
+          <FormContainer classNameCustome="PaddingTop" justify="start">
+              <LabelComponent value="Thành viên" style={{ color: '#fff' }}  />
+              <Col >
+                <TagMemberJoinProject
+                  members={members}
+                  dataInput={dataInput}
+                  setDataInput={setDataInput}
+                />
+              </Col>
+          </FormContainer>
+
+    
           <div className="ProjectButton">
             <Button onClick={onSubmitData} type="primary">
               Add new task
-            </Button>
-          </div>
-        </div>
-        <div className="ProjectForm">
-          <FormContainer>
-            <LabelComponent value="Tên dự án" style={{ color: '#fff' }} />
-            <InputComponents
-              style={{ marginLeft: '90px' }}
-              type="text"
-              dataInput={dataInput}
-              setDataInput={setDataInput}
-              min={0}
-              max={10}
-              placeholder="Project Name"
-              name="namePj"
-              err={err}
-              setErr={setErr}
-              isValidate={true}
-            />
-          </FormContainer>
-          <div className="MemberProjectContainer">
-            <div>
-              <label>Thành viên</label>
-            </div>
-            <div>
-              <TagMemberJoinProject
-                members={members}
-                dataInput={dataInput}
-                setDataInput={setDataInput}
-              />
-            </div>
-          </div>
-          <div>
-            <label>Thời gian</label>
-            <RangePicker format="DD-MM-YYYY" showToday={true} onChange={(e) => onChangeData(e)} />
-          </div>
-          <div className="ProjectButton">
-            <Button onClick={onSubmitData} type="primary">
-              Update task
             </Button>
           </div>
         </div>

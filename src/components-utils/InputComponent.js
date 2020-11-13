@@ -1,10 +1,10 @@
 import React from 'react'
-import { Input } from 'antd'
+import { Input , Col} from 'antd'
 
 const { TextArea } = Input
 
 const InputComponents = (props) => {
-  const { type, isValidate, name } = props
+  const { type, isValidate, name, span = 16, gutter=0 } = props
   const { min, max, style } = props
   const { setDataInput, dataInput, value, err, setErr, placeholder = '' } = props
   console.log('=======im here====', name)
@@ -79,7 +79,11 @@ const InputComponents = (props) => {
     }
   }
 
-  return <div className="ImputComponentsContainer">{siwtchComponent()}</div>
+  return (
+          <Col span={span} gutter={gutter}>
+              <div className="ImputComponentsContainer">{siwtchComponent()}</div>
+          </Col>
+          )
 }
 
 export default InputComponents

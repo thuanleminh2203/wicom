@@ -25,7 +25,7 @@ const MyPageComponent = Loadable({
 
 function App() {
   return (
-    <div>
+    <div style={{height:'100%'}}>
       <ToastContainer
         position="top-right"
         autoClose={5000}
