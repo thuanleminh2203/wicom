@@ -25,7 +25,7 @@ const MyPageComponent = Loadable({
 
 function App() {
   return (
-    <div style={{height:'100%'}}>
+    <div style={{ height: '100%' }}>
       <ToastContainer
         position="top-right"
         autoClose={5000}
@@ -35,7 +35,7 @@ function App() {
         rtl={false}
         pauseOnFocusLoss
         draggable
-        pauseOnHover
+        pauseOnHover={false}
       />
 
       <Router>

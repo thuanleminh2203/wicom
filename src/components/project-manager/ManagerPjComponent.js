@@ -1,15 +1,18 @@
+/* eslint-disable no-unused-vars */
+/* eslint-disable max-len */
 import React, { useState, useEffect } from 'react'
 import Highcharts from 'highcharts/highcharts-gantt'
 import HighchartsReact from 'highcharts-react-official'
-import { DatePicker,Col } from 'antd'
+import { DatePicker, Col } from 'antd'
 import LabelComponent from '../../components-utils/LabelComponent'
 import InputComponents from '../../components-utils/InputComponent'
 import FormContainer from '../../components-utils/FormContainer'
-import { v4 as uuidv4 } from 'uuid'
 import { Button } from 'antd'
 import TagMemberJoinProject from './TagMemberJoinProject'
 import { ApiRequest } from '../../constant/apiUtils'
 import moment from 'moment'
+import { CONSTANT } from './../../constant/Constant'
+import { toast } from 'react-toastify'
 
 const { RangePicker } = DatePicker
 
@@ -31,20 +34,22 @@ export default function ManagerPjComponent() {
   const options = {
     chart: {
       // scrollablePlotArea: {
-        minHeight: 600,
+      // minHeight: 600,
       //   scrollPositionY: 1,
       // },
       // width: 700,
-      // height: 500,
-      maxHeight: 900
+      height: 500,
+      maxHeight: 900,
     },
     responsive: {
-      rules: [{
+      rules: [
+        {
           condition: {
-            minHeight: 500
+            minHeight: 500,
           },
-      }]
-  },
+        },
+      ],
+    },
     // maintainAspectRatio: false,
     // scales: {
     //     yAxes: [{
@@ -134,8 +139,13 @@ export default function ManagerPjComponent() {
 
   const [err, setErr] = useState({})
   const [dataChart, setDataChart] = useState(options)
-  const [dataInput, setDataInput] = useState({ namePj: '', deadline: [], members: [] })
-  const { namePj, deadline, members } = dataInput
+  const [dataInput, setDataInput] = useState({
+    namePj: '',
+    deadline: [],
+    members: [],
+    completed: '',
+  })
+  const { namePj, deadline, members, completed } = dataInput
   const { series = [] } = dataChart
   const [id, setId] = useState(null)
 
@@ -184,9 +194,9 @@ export default function ManagerPjComponent() {
     getLstProject()
   }, [])
 
-  useEffect(() => {
-    console.log('====???????????=========', dataChart)
-  }, [dataChart])
+  // useEffect(() => {
+  //   console.log('====???????????=========', dataChart)
+  // }, [dataChart])
 
   async function getLstProject() {
     await ApiRequest.get('/project')
@@ -210,8 +220,8 @@ export default function ManagerPjComponent() {
                   completed: {
                     amount: e.completed / 100,
                   },
-                  start: moment(e.startTime,"DD-MM-YYYY").valueOf(),
-                  end:  moment(e.endTime,"DD-MM-YYYY").valueOf()
+                  start: moment(e.startTime, 'DD-MM-YYYY').valueOf(),
+                  end: moment(e.endTime, 'DD-MM-YYYY').valueOf(),
                 },
               ],
             }
@@ -232,17 +242,34 @@ export default function ManagerPjComponent() {
   //   console.log("======id ???====",series )
   // }
 
+  console.log('====errr when sublit====', dataInput)
+
   const onSubmitData = async () => {
+    const error = {}
+    if (!namePj) {
+      // setErr({ ...err, namePj: 'Không được để trống trường này !!' })
+      error.namePj = 'Không được để trống trường này !!'
+    }
+    if (completed === '' || completed === undefined || completed === null) {
+      // setErr({ ...err, completed: 'Không được để trống trường này !!' })
+      error.completed = 'Không được để trống trường này !!'
+    }
+    if (!(Array.isArray(deadline) && deadline.length === 2)) {
+      // setErr({ ...err, deadline: 'Không được để trống trường này !!' })
+      error.deadline = 'Không được để trống trường này !!'
+    }
+    console.log('====errr when sublit====', error)
+    setErr(error)
+    if (Object.keys(error).length) return
+
     const startTime = deadline[0].valueOf()
     const endTime = deadline[1].valueOf()
-    // const id = uuidv4()
-    // const id = new Date().getTime()
 
     await ApiRequest.post('/project', {
       projectId: null,
       projectName: namePj,
       owner: concatMember(members),
-      completed: 50,
+      completed,
       startTime: moment(startTime).format('DD-MM-YYYY'),
       endTime: moment(endTime).format('DD-MM-YYYY'),
     })
@@ -258,7 +285,7 @@ export default function ManagerPjComponent() {
               id: body.projectId,
               owner: concatMember(members),
               completed: {
-                amount: 0.5,
+                amount: completed / 100,
               },
               start: startTime,
               end: endTime,
@@ -266,8 +293,11 @@ export default function ManagerPjComponent() {
           ],
         }
         setDataChart({ series: [...series, option] })
+        setDataInput({ ...dataInput, namePj: '', deadline: [], members: [], completed: '' })
+        toast.success('Thêm mới dữ diệu thành công')
       })
       .catch((err) => {
+        toast.error('Thêm mới dữ diệu thất bại')
         console.log('====error===', err)
       })
   }
@@ -280,11 +310,23 @@ export default function ManagerPjComponent() {
     return member
   }
 
+  // function validateData() {
+  //   if (!namePj) {
+  //     setErr({ ...err, namePj: 'Không được để trống trường này !!' })
+  //   }
+  //   if (completed === '' || completed === undefined || completed === null) {
+  //     setErr({ ...err, completed: 'Không được để trống trường này !!' })
+  //   }
+  // }
+
   return (
     <div className="ProjectContainer">
       <div className="HighchartContainer">
-        <HighchartsReact highcharts={Highcharts} constructorType={'ganttChart'} options={dataChart} />
-
+        <HighchartsReact
+          highcharts={Highcharts}
+          constructorType={'ganttChart'}
+          options={dataChart}
+        />
       </div>
       <div className="PeojectFormContainer">
         <div className="ProjectForm">
@@ -301,41 +343,54 @@ export default function ManagerPjComponent() {
               err={err}
               setErr={setErr}
               isValidate={true}
+              value={namePj}
             />
           </FormContainer>
           <FormContainer classNameCustome="PaddingTop" justify="start">
-            <LabelComponent value="Tiến độ" style={{ color: '#fff' }}  />
+            <LabelComponent value="Tiến độ" style={{ color: '#fff' }} />
             <InputComponents
               type="text"
               dataInput={dataInput}
               setDataInput={setDataInput}
               min={0}
-              max={10}
-              placeholder="Progress"
-              name="progress"
+              max={100}
+              placeholder="Completed (%)"
+              name="completed"
               err={err}
               setErr={setErr}
+              minValue={0}
+              maxValue={100}
               isValidate={true}
+              isNumber={true}
+              regex={CONSTANT.REGEX_NUMBER}
+              value={completed}
             />
           </FormContainer>
-          <FormContainer classNameCustome="PaddingTop" justify="start">
-              <LabelComponent value="Thời gian" style={{ color: '#fff' }}  />
-              <Col span={16} gutter={8}>
-                 <RangePicker format="DD-MM-YYYY" showToday={true} onChange={(e) => onChangeData(e)} />
-              </Col>
+          <FormContainer
+            classNameCustome={`PaddingTop ${err.deadline && 'ErrorContainer'}`}
+            justify="start"
+          >
+            <LabelComponent value="Thời gian" style={{ color: '#fff' }} />
+            <Col span={16} gutter={8}>
+              <RangePicker
+                value={deadline}
+                format="DD-MM-YYYY"
+                showToday={true}
+                onChange={(e) => onChangeData(e)}
+              />
+            </Col>
           </FormContainer>
           <FormContainer classNameCustome="PaddingTop" justify="start">
-              <LabelComponent value="Thành viên" style={{ color: '#fff' }}  />
-              <Col >
-                <TagMemberJoinProject
-                  members={members}
-                  dataInput={dataInput}
-                  setDataInput={setDataInput}
-                />
-              </Col>
+            <LabelComponent value="Thành viên" style={{ color: '#fff' }} />
+            <Col>
+              <TagMemberJoinProject
+                members={members}
+                dataInput={dataInput}
+                setDataInput={setDataInput}
+              />
+            </Col>
           </FormContainer>
 
-    
           <div className="ProjectButton">
             <Button onClick={onSubmitData} type="primary">
               Add new task

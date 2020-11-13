@@ -1,4 +1,4 @@
-import React, { Fragment, useState } from 'react'
+import React, { Fragment, useEffect, useState } from 'react'
 import { Tag, Input, Tooltip, AutoComplete } from 'antd'
 import { PlusOutlined } from '@ant-design/icons'
 import { random } from 'lodash'
@@ -12,6 +12,8 @@ export default function TagMemberJoinProject(props) {
     editInputIndex: -1,
     editInputValue: '',
   })
+
+  const [valueSearch, setValueSearch] = useState(null)
 
   const [options, setOptions] = useState([])
 
@@ -33,7 +35,6 @@ export default function TagMemberJoinProject(props) {
   }
 
   const handleInputConfirm = () => {
-    console.log('==ccccc')
     const { inputValue } = state
     let { tags } = state
     if (inputValue && tags.indexOf(inputValue) === -1) {
@@ -45,12 +46,10 @@ export default function TagMemberJoinProject(props) {
   }
 
   const handleEditInputChange = (e) => {
-    console.log('===chnge value')
     setState({ ...state, editInputValue: e.target.value })
   }
 
   const handleEditInputConfirm = () => {
-    console.log('===aaaa')
     setState(({ tags, editInputIndex, editInputValue }) => {
       const newTags = [...tags]
       newTags[editInputIndex] = editInputValue
@@ -72,8 +71,7 @@ export default function TagMemberJoinProject(props) {
   }
 
   const onSearch = (searchText) => {
-    // console.log('=======here====', [...options, value])
-    // setOptions([{ value: searchText }])
+    console.log("===value===",searchText);
     setOptions(
       !searchText ? [] : [mockVal(searchText), mockVal(searchText, 2), mockVal(searchText, 3)]
     )
@@ -83,6 +81,10 @@ export default function TagMemberJoinProject(props) {
     console.log('onSelect', value)
     setState({ ...state, inputValue: value })
   }
+
+  useEffect(()=>{
+
+  },[valueSearch])
 
   return (
     <Fragment>
@@ -134,9 +136,9 @@ export default function TagMemberJoinProject(props) {
         <AutoComplete
           options={options}
           //  style={{ width: 200 }}
-          //   onSearch={(e) => onSearch(e)}
+            onSearch={(e) => onSearch(e)}
           onSelect={onSelect}
-          onSearch={onSearch}
+          // onSearch={(e) => setValueSearch(e)}
         >
           <Input
             type="text"
