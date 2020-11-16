@@ -4,9 +4,9 @@
     position: relative;
     margin: 0px;
     cursor: default;
-    // & input{
-    //     height: 32px;
-    // }
+    & input{
+        padding-left: 5%;
+    }
     & .LoginBackground {
         background: url('../images/login.jpg') no-repeat;
         height: 100%;

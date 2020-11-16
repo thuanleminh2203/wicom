@@ -23,13 +23,13 @@ const showContentModal = (type) => {
 export default function ModalComponent(props) {
   const { data } = props
   const [dataModal, setDataModal] = useState({ ...data })
-  console.log('=====visialbe1111111111', dataModal)
+  // console.log('=====visialbe1111111111', dataModal)
   const { confirmLoading, visible, title } = dataModal
 
-  useEffect(() => {
-    // setDataModal({ ...dataModal, visible })
-    console.log('=====visialbe', data)
-  })
+  // useEffect(() => {
+  //   // setDataModal({ ...dataModal, visible })
+  //   console.log('=====visialbe', data)
+  // })
 
   const handleOk = () => {
     setDataModal({

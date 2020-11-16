@@ -1,16 +1,17 @@
 import React, { useEffect, useState } from 'react'
 import { ApiRequest } from '../../../constant/apiUtils'
+import * as Constant from './../../../constant/Constant'
 
 export default function UserChatComponent(props) {
   const { setIsDisplayChat } = props
   const [data, setData] = useState([])
 
   useEffect(() => {
-    ApiRequest.get('/find-all')
+    ApiRequest.get(Constant.API_USER_FIND_ALL)
       .then((res) => {
         const { data: body = {} } = res
         const { data: dataUser = {} } = body
-        console.log('=====data', dataUser)
+        // console.log('=====data', dataUser)
         setData(dataUser)
       })
       .catch((err) => console.log('====errr==' + err))
@@ -25,7 +26,7 @@ export default function UserChatComponent(props) {
               className="UserDisplay"
               key={value.id}
               onClick={() =>
-                setIsDisplayChat({ username: value.username, fullname: value.fullname })
+                setIsDisplayChat({idReceive: value.id, username: value.username, fullname: value.fullName })
               }
             >
               <div>
@@ -33,7 +34,7 @@ export default function UserChatComponent(props) {
                   src="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png"
                   alt="Cant not display"
                 />
-                <span className="Username">{value.fullname}</span>
+                <span className="Username">{value.fullName}</span>
               </div>
             </div>
           ))}

@@ -40,6 +40,7 @@
 }
 
 .UserChatContainer {
+  background-color: #242526;
   display: flex;
   flex-direction: column;
   // text-align: end;
@@ -61,6 +62,7 @@
   & .Username {
     color: #ffffff;
     margin: 5px;
+    text-transform:capitalize;
   }
 
   & .UserDisplay:first-child {
@@ -114,6 +116,7 @@
   }
   & .Username{
     margin-left: 7px;
+    text-transform:capitalize;
   }
   & .ChatContent{
     overflow-y: scroll;
@@ -147,8 +150,11 @@
     & .MyMessage{
       background-color: #0082fa;
       padding: 0px 8px 3px 8px;
-      display: inline-block;
-      margin-left: 31%;   
+      display: block;
+      width: fit-content;
+      position: absolute;
+      right: 0;
+      // margin-left: 31%;   
     }
   }
   & .ImputComponentsContainer textarea {

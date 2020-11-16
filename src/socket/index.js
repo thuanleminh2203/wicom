@@ -1,79 +1,71 @@
 /* eslint-disable max-len */
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import SockJS from 'sockjs-client/dist/sockjs'
 import Stomp from 'stompjs'
-// import { Stomp } from '@stomp/stompjs'
 
+const myUser= localStorage.getItem('username') ? localStorage.getItem('username') : ''
+const idSend= localStorage.getItem('id') ? localStorage.getItem('id') : ''
+
+let stompClient = null
+// const dataDemo = []
 function SockJSClient(props) {
-  // let socket = new SockJS('/secured/chat')
-  // stompClient = Stomp.over(socket)
-  // const [stompClient,setStompClient] = useState(Stomp.over(socket))
-  let stompClient = null
-  // console.log('username', props.username)
+  const { username: sendTo = null , idReceive, dataMess, setDataMess} = props
+  // const dataDemo = dataMess
+  const [dataDemo,setDataDemo] = useState([])
   useEffect(() => {
     connect()
-    // return () => {
-    //     stompClient.disconnect()
-    // }
-  }, [props.username])
-  let sessionId = ''
-  // let username = 
+
+  }, [connect])
+
+  useEffect(()=>{
+    return ()=>{
+      stompClient.disconnect()
+    }
+  },[])
+  // console.log("datade,o======" , dataMess);
+
+  // useEffect(()=>{
+  //   console.log("datade,o======" , [...dataMess,...dataDemo]);
+  //   setDataMess([...dataMess,...dataDemo])
+  // },[dataDemo])
+
+
+  // console.log("====datames===",[...demmo,"123123"])
+  // console.log("====dataMess===",dataMess);
 
   function connect() {
     const socket = new SockJS('http://localhost:8080/secured/room')
     stompClient = Stomp.over(socket)
-    // stompClient.debug = () => {}
 
+    console.log("===data1==",dataMess)
     stompClient.connect(
       {},
       (frame) => {
         console.log('Connected: ' + frame)
-        let url = stompClient.ws._transport.url
-        url = url.replace('ws://localhost:8080/secured/room/', '')
-        url = url.replace(/^[0-9]+\//, '')
-        url = url.replace('/websocket', '')
-        sessionId = url
-        console.log('Your current session is: ' + sessionId)
-        console.log('subbbbbbbb===', '/secured/user/queue/specific-user' + '-user' + sessionId)
-        // var url = stompClient.ws._transport.url
-        // url = url.replace('ws://localhost:8080/spring-security-mvc-socket/secured/room/', '')
-        // url = url.replace('/websocket', '')
-        // url = url.replace(/^[0-9]+\//, '')
-        // console.log('Your current session is: ' + url)
-        // sessionId = url
-
-        // console.log('/secured/user/queue/specific-user/' + sessionId)
-        // /secured/user/queue/specific-user/c3nj1di0
-        stompClient.subscribe('/user/sonbeo/specific-user' + '-user' + sessionId, (mess) =>
-          // /secured/user/queue/specific-user
-          console.log('====mess==')
+        stompClient.subscribe('/secured/user/queue/specific-user' + myUser, (mess,dataDemo) =>{
+           const data = JSON.parse(mess.body)
+          //  setDataDemo([...dataDemo,data])
+           console.log("===data==",dataDemo)
+          //  dataMess.push(data)
+            // dataDemo.push(data)
+            // setDataMess([...dataMess,data])
+        }
+            // console.log("==mes ???===",mess.body.messageId)
         )
       },
       (err) => console.log('======errr====', err)
     )
+
   }
 
-  // stompClient.connect(
-  //   {},
-  //   (frame) => {
-  //     console.log('Connected: ' + frame)
-  //     stompClient.subscribe('/topic/thuanlm', (mess) => {
-  //       console.log('====mess==' + mess)
-
-  //       // showGreeting(JSON.parse(greeting.body).content);
-  //     })
-  //   },
-  //   (err) => console.log('loi j nhi', err)
-  // )
-  // }
-  // )
-  // }
   function send() {
-    stompClient.send(
-      '/spring-security-mvc-socket/secured/room',
-      {},
-      JSON.stringify({ from: 'thuanlm', text: 'xin chao', to: 'sonbeo' })
-    )
+    if(myUser && sendTo && stompClient){
+      stompClient.send(
+        '/spring-security-mvc-socket/secured/room',
+        {},
+        JSON.stringify({ idSend, from: myUser, content: 'xin chao', to: sendTo, idReceive})
+      )
+    }
   }
 
   return <button onClick={() => send()}>click me to send</button>

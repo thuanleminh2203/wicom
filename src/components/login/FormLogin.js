@@ -9,6 +9,7 @@ import FormContainer from '../../components-utils/FormContainer'
 import LabelComponent from '../../components-utils/LabelComponent'
 import { Col, DatePicker } from 'antd';
 import moment from 'moment'
+import  * as Constant  from './../../constant/Constant'
 
 const initData = {
   username: '',
@@ -23,7 +24,7 @@ const initData = {
 const STATUS_LOGIN = 1
 const STATUS_REGISTER = 2
 const STATUS_FORGET = 3
-const REGEX_EMAIL = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/
+// const REGEX_EMAIL = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/
 const REGEX_PHONENUMBER = /^[0-9]{10}$/
 const FormLogin = () => {
   const [dataInput, setDataInput] = useState(initData)
@@ -46,7 +47,7 @@ const FormLogin = () => {
     if(!username){
         error.username='Không được để trống trường này !!'
        }else{
-         if(!REGEX_EMAIL.test(username)){
+         if(!Constant.REGEX_EMAIL.test(username)){
             error.username= 'Email không đúng định dạng !!'
          }
        }
@@ -108,19 +109,28 @@ const FormLogin = () => {
           return
 
      console.log("=====status====",status)
-     status === STATUS_LOGIN ? await apiLogin() : status=== STATUS_REGISTER ? await apiRegister() :  await apiResetPwd()
+     status === STATUS_LOGIN ? await apiLogin(): status=== STATUS_REGISTER ? await apiRegister() :  await apiResetPwd()
   }
 
+
   async function apiLogin(){
-    await ApiRequest.post('/authenticate', {username,password})
+    await ApiRequest.post(Constant.API_AUTHENTICATE, {username,password})
     .then((res) => {
       const { data = {} } = res
       const { data: body = {} } = data
-      const { token = '' } = body
+      const { token = '', roles = [] , username = '', fullName= '',id= '' } = body
+
       localStorage.setItem('token', token)
+      localStorage.setItem('roles', roles)
+      localStorage.setItem('username', username)
+      localStorage.setItem('fullName', fullName)
+      localStorage.setItem('id', id)
+
       history.push('/home')
+      window.location.reload()
     })
     .catch((err) => {
+      console.log("===err===",err)
       const { response = {} } = err
       const { data = {} } = response
       const { mess = '' } = data
@@ -129,7 +139,7 @@ const FormLogin = () => {
   }
 
   async function apiRegister(){
-    await ApiRequest.post('/register', dataInput)
+    await ApiRequest.post(Constant.API_USER, dataInput)
     .then((res) => {
       const { data = {} } = res
       const { data: body = {} } = data

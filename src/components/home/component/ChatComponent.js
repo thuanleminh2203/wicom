@@ -1,21 +1,44 @@
-import React from 'react'
+import React,{useEffect,useState} from 'react'
 import InputComponents from './../../../components-utils/InputComponent'
 import { SendOutlined, CloseOutlined } from '@ant-design/icons'
 import { Row, Col } from 'antd'
 import SockJSClient from '../../../socket'
+import { ApiRequest } from '../../../constant/apiUtils'
+import  * as Constant  from '../../../constant/Constant'
+
 const data = {
   id: 16,
   username: 'Thuan Le Minh',
   src: 'https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png',
 }
 
+const myId = localStorage.getItem('id') ? localStorage.getItem('id') : ''
 export default function ChatComponent(props) {
   const { setIsDisplayChat, isDisplayChat } = props
-  const { username } = isDisplayChat
+  const { username, idReceive} = isDisplayChat
+  const [dataMess, setDataMess] = useState([])
+  // console.log("====dataMess===",dataMess);
+
+  useEffect(() => {
+    if(idReceive){
+      onGetMess()
+
+    } 
+  }, [idReceive])
+
+  async function onGetMess(){
+    await ApiRequest.get(Constant.API_MESS+idReceive)
+    .then((res) => {
+      const { data: body = {} } = res
+      const { data = [] } = body
+      setDataMess(data)
+    })
+    .catch((err) => console.log("=====err====", err))
+  }
 
   return (
     <>
-      <SockJSClient username={username} />
+      <SockJSClient username={username} idReceive={idReceive} setDataMess={setDataMess} dataMess={dataMess} />
       <div className="ChatContainer">
         <div className="ChatHeader">
           <img src={data.src} alt="Cant not display" />
@@ -27,23 +50,7 @@ export default function ChatComponent(props) {
         </div>
         <hr className="LineContainer" />
         <div className="ChatContent">
-          <p>Lorem Ipsum has bee</p>
-          <p>
-            Lorem Ipsum has been the industrys standard dummy text ever since the 1500s, when an
-            unknown printer took a galley of type and scrambled it to make a type specimen book
-          </p>
-          <p>
-            Lorem Ipsum has been the industrys standard dummy text ever since the 1500s, when an
-            unknown printer took a galley of type and scrambled it to make a type specimen book
-          </p>
-          <p>
-            Lorem Ipsum has been the industrys standard dummy text ever since the 1500s, when an
-            unknown printer took a galley of type and scrambled it to make a type specimen book
-          </p>
-          <p className="MyMessage">
-            Lorem Ipsum has been the industrys standard dummy text ever since the 1500s, when an
-            unknown printer took a galley of type and scrambled it to make a type specimen book
-          </p>
+          {dataMess.length && dataMess.map((element)  => <div style={{display:'flex',position:'relative',minHeight:'25px'}}><p key={element.messageId} style={{float:'right'}} className={ `${ parseInt(myId) === parseInt(element.idSend) ? 'MyMessage':''}`}>{element.content}</p></div>)}
         </div>
         <hr className="LineContainer" />
         <Row>

@@ -11,7 +11,7 @@ import { Button } from 'antd'
 import TagMemberJoinProject from './TagMemberJoinProject'
 import { ApiRequest } from '../../constant/apiUtils'
 import moment from 'moment'
-import { CONSTANT } from './../../constant/Constant'
+import * as Constant from './../../constant/Constant'
 import { toast } from 'react-toastify'
 
 const { RangePicker } = DatePicker
@@ -199,7 +199,7 @@ export default function ManagerPjComponent() {
   // }, [dataChart])
 
   async function getLstProject() {
-    await ApiRequest.get('/project')
+    await ApiRequest.get(Constant.API_PROJECT)
       .then((res) => {
         const { data = {} } = res
         const { data: body = [] } = data
@@ -242,7 +242,7 @@ export default function ManagerPjComponent() {
   //   console.log("======id ???====",series )
   // }
 
-  console.log('====errr when sublit====', dataInput)
+  // console.log('====errr when sublit====', dataInput)
 
   const onSubmitData = async () => {
     const error = {}
@@ -258,14 +258,14 @@ export default function ManagerPjComponent() {
       // setErr({ ...err, deadline: 'Không được để trống trường này !!' })
       error.deadline = 'Không được để trống trường này !!'
     }
-    console.log('====errr when sublit====', error)
+    // console.log('====errr when sublit====', error)
     setErr(error)
     if (Object.keys(error).length) return
 
     const startTime = deadline[0].valueOf()
     const endTime = deadline[1].valueOf()
 
-    await ApiRequest.post('/project', {
+    await ApiRequest.post(Constant.API_PROJECT, {
       projectId: null,
       projectName: namePj,
       owner: concatMember(members),
@@ -362,7 +362,7 @@ export default function ManagerPjComponent() {
               maxValue={100}
               isValidate={true}
               isNumber={true}
-              regex={CONSTANT.REGEX_NUMBER}
+              regex={Constant.REGEX_NUMBER}
               value={completed}
             />
           </FormContainer>

@@ -37,7 +37,7 @@ const { Header, Content } = Layout
 const src = 'https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png'
 
 const LayoutComponent = () => {
-  const [idSelect, setIdSelect] = useState('3')
+  const [idSelect, setIdSelect] = useState('1')
   const [isDisplayChat, setIsDisplayChat] = useState(null)
 
   // useEffect(() => {
@@ -89,7 +89,7 @@ const LayoutComponent = () => {
                 paddingLeft: '12px',
               }}
             >
-              Doãn Chí Bình
+              {localStorage.getItem('fullName')}
             </span>
           </div>
         </div>
@@ -100,7 +100,7 @@ const LayoutComponent = () => {
           {/* {idSelect == '1' && isDisplayChat && <ChatComponent />} */}
           {isDisplayChat && (
             <ChatComponent setIsDisplayChat={setIsDisplayChat} isDisplayChat={isDisplayChat} />
-          )}
+          )} 
         </div>
       </Content>
     </Layout>
