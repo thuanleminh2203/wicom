@@ -1,23 +1,23 @@
 import React, { Fragment, useEffect, useState } from 'react'
 import { Tag, Input, Tooltip, AutoComplete } from 'antd'
 import { PlusOutlined } from '@ant-design/icons'
-import { random, values } from 'lodash'
-import { ApiRequest } from '../../constant/apiUtils'
-import * as Constant from './../../constant/Constant'
-
-
+// import { random } from 'lodash'
 
 export default function TagMemberJoinProject(props) {
-  const { setDataInput, dataInput } = props
+  const { members, setDataInput, dataInput } = props
   const [state, setState] = useState({
-    tags: dataInput.members,
+    tags: members,
     inputVisible: false,
     inputValue: '',
     editInputIndex: -1,
     editInputValue: '',
   })
-  const { tags, inputVisible, inputValue, editInputIndex, editInputValue } = state
 
+  const [valueSearch, setValueSearch] = useState(null)
+
+  const [options, setOptions] = useState([])
+
+  const { tags, inputVisible, inputValue, editInputIndex, editInputValue } = state
 
   const handleClose = (removedTag) => {
     const tags = state.tags.filter((tag) => tag !== removedTag)
@@ -25,12 +25,6 @@ export default function TagMemberJoinProject(props) {
     setState({ tags })
     setDataInput({ ...dataInput, members: tags })
   }
-
-  useEffect(()=>{
-      if(dataInput.members.length === 0){
-        setState({...state, tags:[]})
-      }
-  },[dataInput.members])
 
   const showInput = () => {
     setState({ ...state, inputVisible: true })
@@ -46,6 +40,7 @@ export default function TagMemberJoinProject(props) {
     if (inputValue && tags.indexOf(inputValue) === -1) {
       tags = [...tags, inputValue]
     }
+    console.log(tags)
     setState({ ...state, tags, inputVisible: false, inputValue: '' })
     setDataInput({ ...dataInput, members: tags })
   }
@@ -68,6 +63,34 @@ export default function TagMemberJoinProject(props) {
     })
   }
 
+  // const mockVal = (str, repeat = 1) => {
+  //   return {
+  //     key: random(10),
+  //     value: str.repeat(repeat),
+  //   }
+  // }
+
+  // const onSearch = (searchText) => {
+  //   console.log('===value===', searchText)
+  //   setOptions(
+  //     !searchText ? [] : [mockVal(searchText), mockVal(searchText, 2), mockVal(searchText, 3)]
+  //   )
+  // }
+
+  const onSelect = (value) => {
+    console.log('onSelect', value)
+    setState({ ...state, inputValue: value })
+  }
+
+  useEffect(() => {
+    setTimeout(getUserByname(valueSearch), 1000)
+    return () => {
+      clearTimeout(getUserByname)
+    }
+  }, [valueSearch])
+
+  const getUserByname = async () => {}
+
   return (
     <Fragment>
       {tags.map((tag, index) => {
@@ -88,25 +111,23 @@ export default function TagMemberJoinProject(props) {
         const isLongTag = tag.length > 20
 
         const tagElem = (
-          <div>
-              <Tag
-                className="edit-tag"
-                key={tag}
-                closable={index >= 0}
-                onClose={() => handleClose(tag)}
-              >
-                <span
-                  onDoubleClick={(e) => {
-                    if (index >= 0) {
-                      setState({ ...state, editInputIndex: index, editInputValue: tag })
-                      e.preventDefault()
-                    }
-                  }}
-                >
-                  {isLongTag ? `${tag.slice(0, 20)}...` : tag}
-                </span>
-              </Tag>
-          </div>
+          <Tag
+            className="edit-tag"
+            key={tag}
+            closable={index >= 0}
+            onClose={() => handleClose(tag)}
+          >
+            <span
+              onDoubleClick={(e) => {
+                if (index >= 0) {
+                  setState({ ...state, editInputIndex: index, editInputValue: tag })
+                  e.preventDefault()
+                }
+              }}
+            >
+              {isLongTag ? `${tag.slice(0, 20)}...` : tag}
+            </span>
+          </Tag>
         )
         return isLongTag ? (
           <Tooltip title={tag} key={tag}>
@@ -116,7 +137,14 @@ export default function TagMemberJoinProject(props) {
           tagElem
         )
       })}
-      {inputVisible && 
+      {inputVisible && (
+        <AutoComplete
+          options={options}
+          //  style={{ width: 200 }}
+          // onSearch={(e) => onSearch(e)}
+          onSelect={onSelect}
+          onSearch={(e) => setValueSearch(e)}
+        >
           <Input
             type="text"
             size="small"
@@ -126,15 +154,13 @@ export default function TagMemberJoinProject(props) {
             onBlur={handleInputConfirm}
             onPressEnter={handleInputConfirm}
           />
-
-      }
-      {!inputVisible && 
-        <div>
-          <Tag className="site-tag-plus" onClick={showInput}>
-            <PlusOutlined /> Add member
-          </Tag>
-        </div>
-      }
+        </AutoComplete>
+      )}
+      {!inputVisible && (
+        <Tag className="site-tag-plus" onClick={showInput}>
+          <PlusOutlined /> Add member
+        </Tag>
+      )}
     </Fragment>
   )
 }

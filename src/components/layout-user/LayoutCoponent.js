@@ -47,7 +47,7 @@ const LayoutComponent = () => {
   const switchBody = (key) => {
     switch (key) {
       case '1':
-        return <MainHome setIsDisplayChat={setIsDisplayChat} />
+        return <MainHome setIsDisplayChat={setIsDisplayChat} isDisplayChat={isDisplayChat} />
       case '2':
         return <h1>22222222222222222</h1>
       case '3':
@@ -100,7 +100,7 @@ const LayoutComponent = () => {
           {/* {idSelect == '1' && isDisplayChat && <ChatComponent />} */}
           {isDisplayChat && (
             <ChatComponent setIsDisplayChat={setIsDisplayChat} isDisplayChat={isDisplayChat} />
-          )} 
+          )}
         </div>
       </Content>
     </Layout>

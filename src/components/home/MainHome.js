@@ -3,9 +3,11 @@ import StatusComponent from './component-in-home/StatusComponent'
 import NewsComponent from './component-in-home/NewsComponent'
 import UserChatComponent from './component/UserChatComponent'
 import { Row, Col } from 'antd'
+// import Socket from '../../socket/Socket'
+// import Socket from '../../socket/socketDemo'
 
 export default function MainHome(props) {
-  const { setIsDisplayChat } = props
+  const { setIsDisplayChat, isDisplayChat } = props
   return (
     <Fragment>
       <Row>
@@ -19,6 +21,7 @@ export default function MainHome(props) {
           <UserChatComponent setIsDisplayChat={setIsDisplayChat} />
         </Col>
       </Row>
+      {/* <Socket isDisplayChat={isDisplayChat} /> */}
     </Fragment>
   )
 }

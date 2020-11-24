@@ -26,7 +26,11 @@ export default function UserChatComponent(props) {
               className="UserDisplay"
               key={value.id}
               onClick={() =>
-                setIsDisplayChat({idReceive: value.id, username: value.username, fullname: value.fullName })
+                setIsDisplayChat({
+                  idReceive: value.id,
+                  username: value.username,
+                  fullname: value.fullName,
+                })
               }
             >
               <div>

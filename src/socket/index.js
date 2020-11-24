@@ -3,67 +3,78 @@ import React, { useEffect, useState } from 'react'
 import SockJS from 'sockjs-client/dist/sockjs'
 import Stomp from 'stompjs'
 
-const myUser= localStorage.getItem('username') ? localStorage.getItem('username') : ''
-const idSend= localStorage.getItem('id') ? localStorage.getItem('id') : ''
+const myUser = localStorage.getItem('username') ? localStorage.getItem('username') : ''
+const idSend = localStorage.getItem('id') ? localStorage.getItem('id') : ''
 
 let stompClient = null
+let subscription = null
 // const dataDemo = []
 function SockJSClient(props) {
-  const { username: sendTo = null , idReceive, dataMess, setDataMess} = props
-  // const dataDemo = dataMess
-  const [dataDemo,setDataDemo] = useState([])
+  const { username: sendTo = null, idReceive, dataMess, setDataMess } = props
+  const [test, setTest] = useState(null)
+  // useEffect(() => {
+  //   connect()
+  //   // return () => {
+  //   //   subscription && stompClient.unsubscribe(subscription.id)
+  //   // }
+  // }, [])
+
   useEffect(() => {
+    test && setDataMess([...dataMess, test])
+  }, [test])
+
+  useEffect(() => {
+    // setDataMess([...dataMess, test])
+    // console.log('====test====', test)
+    // console.log('====subscription====', subscription)
     connect()
-
-  }, [connect])
-
-  useEffect(()=>{
-    return ()=>{
-      stompClient.disconnect()
+    return () => {
+      subscription && stompClient.unsubscribe(subscription.id)
     }
-  },[])
-  // console.log("datade,o======" , dataMess);
+  }, [subscription])
 
-  // useEffect(()=>{
-  //   console.log("datade,o======" , [...dataMess,...dataDemo]);
-  //   setDataMess([...dataMess,...dataDemo])
-  // },[dataDemo])
-
-
-  // console.log("====datames===",[...demmo,"123123"])
-  // console.log("====dataMess===",dataMess);
+  // useEffect(() => {
+  //   !subscription && connect()
+  //   console.log('=====subscription======', subscription)
+  //   return () => {
+  //     console.log('=====Unsubscription======', subscription)
+  //     stompClient && stompClient.unsubscribe(subscription.id)
+  //     stompClient = null
+  //   }
+  // }, [subscription])
 
   function connect() {
-    const socket = new SockJS('http://localhost:8080/secured/room')
+    const socket = new SockJS('http://localhost:8080/ws')
     stompClient = Stomp.over(socket)
 
-    console.log("===data1==",dataMess)
     stompClient.connect(
       {},
-      (frame) => {
-        console.log('Connected: ' + frame)
-        stompClient.subscribe('/secured/user/queue/specific-user' + myUser, (mess,dataDemo) =>{
-           const data = JSON.parse(mess.body)
-          //  setDataDemo([...dataDemo,data])
-           console.log("===data==",dataDemo)
-          //  dataMess.push(data)
-            // dataDemo.push(data)
-            // setDataMess([...dataMess,data])
-        }
-            // console.log("==mes ???===",mess.body.messageId)
-        )
+      () => {
+        subscription = stompClient.subscribe('/topic/all/' + myUser, (mess) => {
+          const data = JSON.parse(mess.body)
+          // console.log('===data==', dataMess)
+          // setDataMess([...dataMess, data])
+          setTest(data)
+        })
       },
       (err) => console.log('======errr====', err)
     )
-
   }
 
+  // useEffect(() => {
+  //   console.log('===subscription===', subscription)
+  // }, [subscription])
+
+  // function disconnect() {
+  //   stompClient.unsubscribe()
+  // }
+
   function send() {
-    if(myUser && sendTo && stompClient){
+    if (myUser && sendTo && stompClient) {
       stompClient.send(
-        '/spring-security-mvc-socket/secured/room',
+        '/app/message',
         {},
-        JSON.stringify({ idSend, from: myUser, content: 'xin chao', to: sendTo, idReceive})
+        JSON.stringify({ idSend, from: myUser, content: 'xin chao', to: sendTo, idReceive })
       )
     }
   }
