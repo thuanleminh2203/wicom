@@ -121,6 +121,9 @@
   & .ChatContent{
     overflow-y: scroll;
     height: 349px;
+    // & div {
+    //   flex-grow: 1;
+    // }
 
     &::-webkit-scrollbar-track {
       border-radius: 10px;

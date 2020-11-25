@@ -1,8 +1,10 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom'
 import Loadable from 'react-loadable'
 import { ToastContainer } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
+import { send, connect } from './socket/SockJSClientBackup'
+import { toast } from 'react-toastify'
 
 const Home = Loadable({
   loader: () => import('./pages/Home'),
@@ -23,9 +25,42 @@ const MyPageComponent = Loadable({
   loading: () => null,
 })
 
+// let stompClient = null
+// stompClient = connect(stompClient)
+// stompClient.connect(
+//   {},
+//   () => {
+//     stompClient.subscribe('/topic/all/', (mess) => {
+//       console.log('======mess1=====', mess.body)
+//       toast.error(mess.body)
+//     })
+//   },
+//   (err) => console.log('======errr1====', err)
+// )
+
+// console.log('=====stompClient======', stompClient)
+
 function App() {
+  console.log("=====appp=====")
   return (
     <div style={{ height: '100%' }}>
+      {/* <button
+        onClick={() =>
+          stompClient.send(
+            '/app/message',
+            {},
+            JSON.stringify({
+              idSend: 1,
+              from: 'myUser',
+              content: 'xin chao',
+              to: 'sendTo',
+              idReceive: 2,
+            })
+          )
+        }
+      >
+        Click me now
+      </button> */}
       <ToastContainer
         position="top-right"
         autoClose={5000}

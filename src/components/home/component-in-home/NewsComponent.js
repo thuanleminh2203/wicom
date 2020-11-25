@@ -105,10 +105,10 @@ export default function NewsComponent() {
         }
         content={
           <p>
-            {/* We supply a series of design principles, practical patterns and high quality design
+            We supply a series of design principles, practical patterns and high quality design
             resources (Sketch and Axure), to help people create their product prototypes beautifully
-            and efficiently. */}
-            nacutenaxinhnadangyeunadethuongnananananananannananan cute hột me hột mít hột xa
+            and efficiently. nacutenaxinhnadangyeunadethuongnananananananannananan cute hột me hột
+            mít hột xa
           </p>
         }
         datetime={

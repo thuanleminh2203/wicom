@@ -14,13 +14,21 @@ const InputComponents = (props) => {
     minValue,
     maxValue,
     isNumber = false,
+    sendMessageSocket,
   } = props
   const { min, max, style } = props
   const { setDataInput, dataInput, err, value: valueProps, placeholder = '' } = props
+  // console.log('===dataInput===', valueProps)
+
+  // function onEnterTextArea(e) {
+  //   console.log('====event====', e)
+  // }
 
   function setValue(e) {
     const { target } = e
-    const { value } = target
+    let { value } = target
+
+    value = value.replace(/\r?\n/g, '')
 
     if (isValidate) {
       if (value.length < min || value.length > max) {
@@ -29,7 +37,7 @@ const InputComponents = (props) => {
         return
       }
       if (isNumber) {
-        console.log('===regex==', regex.test(value), value)
+        // console.log('===regex==', regex.test(value), value)
         // /^\d{3}$/
         if (value === '') setDataInput({ ...dataInput, [name]: value })
 
@@ -71,9 +79,28 @@ const InputComponents = (props) => {
             placeholder={placeholder}
             autoSize
             onChange={(e) => setValue(e)}
+            value={valueProps}
+            name={name}
+            onPressEnter={() => sendMessageSocket()}
+            isValidate={true}
           />
         )
       }
+
+      // case 'textarea': {
+      //   const { placeholder = '' } = props
+      //   return (
+      //     <tex
+      //       style={style}
+      //       placeholder={placeholder}
+      //       autoSize
+      //       onChange={(e) => setValue(e)}
+      //       value={valueProps}
+      //       name={name}
+      //       onPressEnter={() => sendMessageSocket()}
+      //     />
+      //   )
+      // }
 
       default: {
         return (
