@@ -2,15 +2,24 @@ import React, { createElement, useState } from 'react'
 import { Comment, Avatar, Form, Button, List, Input, Tooltip } from 'antd'
 import moment from 'moment'
 import { DislikeOutlined, LikeOutlined, DislikeFilled, LikeFilled } from '@ant-design/icons'
+import { ApiRequest } from '../../../constant/apiUtils'
+import * as Constant from './../../../constant/Constant'
 
 const { TextArea } = Input
 
 const CommentList = ({ comments }) => (
   <List
     dataSource={comments}
-    header={`${comments.length} ${comments.length > 1 ? 'replies' : 'reply'}`}
     itemLayout="horizontal"
-    renderItem={(props) => <Comment {...props} />}
+    renderItem={(comment) => (
+      <Comment
+        author={comment.fullName}
+        avatar="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png"
+        content={comment.content}
+        datetime={comment.createdAt}
+        style={{ color: 'white' }}
+      />
+    )}
   />
 )
 
@@ -26,11 +35,21 @@ const Editor = ({ onChange, onSubmit, submitting, value }) => (
     </Form.Item>
   </>
 )
-export default function NewsComponent() {
-  const [data, setData] = useState({ comments: [], submitting: false, value: '' })
+
+export default function NewsComponent(props) {
+  const { dataNews } = props
+  const { content, newsId, userId, createdAt, fullName, comments = [] } = dataNews
+
+  const [data, setData] = useState({ listComment: comments, submitting: false, value: '' })
+
   const [likes, setLikes] = useState(0)
   const [dislikes, setDislikes] = useState(0)
   const [action, setAction] = useState(null)
+
+  const { listComment = [], submitting, value } = data
+
+  // const { avatar, content, dislike, like, newsId, userId, createdAt ,
+  //  fullName, comments : lstCmt = [] } = dataNews
 
   const like = () => {
     setLikes(1)
@@ -62,30 +81,30 @@ export default function NewsComponent() {
       <span className="comment-action">{dislikes}</span>
     </span>,
   ]
-  const { comments, submitting, value } = data
-  const handleSubmit = () => {
+
+  const handleSubmit = async () => {
     if (!data.value) {
       return
     }
 
-    setData({ ...data, submitting: true })
+    // setData({ ...data, submitting: true })
+    await onComment()
+    // setData({ ...data, submitting: false })
+  }
 
-    setTimeout(() => {
-      setData({
-        ...data,
-        submitting: false,
-        value: '',
-        comments: [
-          {
-            author: 'Han Solo',
-            avatar: 'https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png',
-            content: <p>{value}</p>,
-            datetime: moment().fromNow(),
-          },
-          ...data.comments,
-        ],
+  // console.log('===comment===', lstCmt)
+  async function onComment() {
+    await ApiRequest.post(Constant.API_COMMENT, {
+      newsId,
+      content: value,
+      createdAt: moment().format('DD-MM-YYYY'),
+    })
+      .then((res) => {
+        const { data = {} } = res
+        const { data: body = {} } = data
+        setData({ ...data, listComment: [...listComment, body] })
       })
-    }, 1000)
+      .catch((err) => console.log('=====err====', err))
   }
 
   const handleChange = (e) => {
@@ -96,34 +115,27 @@ export default function NewsComponent() {
     <div className="NewsContainer">
       <Comment
         actions={actions}
-        author={<a className="UserNameContainer">Han Solo</a>}
+        author={<a className="UserNameContainer">{fullName}</a>}
         avatar={
           <Avatar
             src="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png"
-            alt="Han Solo"
+            alt={fullName}
           />
         }
-        content={
-          <p>
-            We supply a series of design principles, practical patterns and high quality design
-            resources (Sketch and Axure), to help people create their product prototypes beautifully
-            and efficiently. nacutenaxinhnadangyeunadethuongnananananananannananan cute hột me hột
-            mít hột xa
-          </p>
-        }
+        content={<p>{content}</p>}
         datetime={
-          <Tooltip title={moment().format('YYYY-MM-DD HH:mm:ss')}>
+          <Tooltip title={createdAt}>
             <span>{moment().fromNow()}</span>
           </Tooltip>
         }
       >
         <>
-          {comments.length > 0 && <CommentList comments={comments} />}
+          {comments.length > 0 && <CommentList comments={listComment} />}
           <Comment
             avatar={
               <Avatar
                 src="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png"
-                alt="Han Solo"
+                alt={fullName}
               />
             }
             content={

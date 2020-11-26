@@ -11,4 +11,10 @@ export const API_USER = API + '/user'
 export const API_USER_FIND_ALL = API_USER + '/find-all'
 export const API_USER_SEARCH = API + '/user/search-by-name/'
 
+//news
+export const API_NEWS = API + '/news'
+
+//comment
+export const API_COMMENT = API + '/comment'
+
 // export default Constant
