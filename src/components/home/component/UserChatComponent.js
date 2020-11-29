@@ -1,10 +1,13 @@
 import React, { useEffect, useState } from 'react'
 import { ApiRequest } from '../../../constant/apiUtils'
 import * as Constant from './../../../constant/Constant'
+import { Badge } from 'antd'
 
 export default function UserChatComponent(props) {
   const { setIsDisplayChat } = props
   const [data, setData] = useState([])
+  const [hover,setHover] = useState(null)
+
 
   useEffect(() => {
     ApiRequest.get(Constant.API_USER_FIND_ALL)
@@ -17,12 +20,18 @@ export default function UserChatComponent(props) {
       .catch((err) => console.log('====errr==' + err))
   }, [])
 
+  function testHover(e){
+    console.log("===event====",e)
+    // setHover()
+  }
+
   return (
     <>
       <div className="UserChatContainer">
         {data.length &&
           data.map((value) => (
-            <div
+           <div>
+              <div
               className="UserDisplay"
               key={value.id}
               onClick={() =>
@@ -32,7 +41,11 @@ export default function UserChatComponent(props) {
                   fullname: value.fullName,
                 })
               }
+              // onMouseEnter={() => setHover(true)}
+              // onMouseLeave={() => setHover(false)}
+
             >
+            <Badge count={5} offset={[10, 10]} >
               <div>
                 <img
                   src="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png"
@@ -40,7 +53,9 @@ export default function UserChatComponent(props) {
                 />
                 <span className="Username">{value.fullName}</span>
               </div>
+            </Badge>
             </div>
+           </div>
           ))}
       </div>
     </>

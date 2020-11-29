@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from 'react'
 import InputComponents from './../../../components-utils/InputComponent'
 import { SendOutlined, CloseOutlined } from '@ant-design/icons'
-import { Row, Col } from 'antd'
+import { Row, Col  } from 'antd'
 import { ApiRequest } from '../../../constant/apiUtils'
 import * as Constant from '../../../constant/Constant'
 import { connect } from '../../../socket/SockJSClientBackup'
@@ -85,24 +85,6 @@ export default function ChatComponent(props) {
   }
 
   return (
-    <>
-      <button
-        onClick={() =>
-          stompClient.send(
-            '/app/message',
-            {},
-            JSON.stringify({
-              idSend: 1,
-              from: 'myUser',
-              content: 'xin chao',
-              to: 'sendTo',
-              idReceive: 2,
-            })
-          )
-        }
-      >
-        Click me now
-      </button>
       <div className="ChatContainer">
         <div className="ChatHeader">
           <img src={data.src} alt="Cant not display" />
@@ -155,6 +137,5 @@ export default function ChatComponent(props) {
           </Col>
         </Row>
       </div>
-    </>
   )
 }

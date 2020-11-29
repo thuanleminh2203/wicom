@@ -5,7 +5,8 @@ import moment from 'moment'
 import { ApiRequest } from '../../../constant/apiUtils'
 import * as Constant from './../../../constant/Constant'
 
-const StatusComponent = () => {
+const StatusComponent = (props) => {
+  const {handleOk} = props
   const [dataModal, setDataModal] = useState({
     modalText: 'Content of the modal haha',
     title: 'Tạo bài viết',
@@ -31,23 +32,11 @@ const StatusComponent = () => {
   //   }, 2000)
   // }
 
-  const handleOk = async () => {
-    await ApiRequest.post(Constant.API_NEWS, { content, createdAt: moment().format('DD-MM-YYYY') })
-      .then((res) => console.log('===res===', res))
-      .catch((err) => console.log('===er===', err))
-    // setDataModal({
-    //   ...dataModal,
-    //   modalText: 'The modal will be closed after two seconds',
-    //   confirmLoading: true,
-    // })
-    // setTimeout(() => {
-    //   setDataModal({
-    //     ...dataModal,
-    //     visible: false,
-    //     confirmLoading: false,
-    //   })
-    // }, 2000)
-  }
+  // const handleOk = async () => {
+  //   await ApiRequest.post(Constant.API_NEWS, { content, createdAt: moment().format('DD-MM-YYYY') })
+  //     .then((res) => console.log('===res===', res))
+  //     .catch((err) => console.log('===er===', err))
+  // }
 
   const handleCancel = () => {
     setDataModal({
@@ -55,7 +44,13 @@ const StatusComponent = () => {
       visible: false,
     })
   }
+  
+  async function onSubmitStatus(){
+    await handleOk(content)
+    setDataInput({ content: '' })
+    handleCancel()
 
+  }
   const contentModal = () => (
     <InputComponents
       placeholder="Bạn đang nghĩ gì thế ?"
@@ -105,7 +100,7 @@ const StatusComponent = () => {
             name="content"
             value={content}
           />
-          <Button type="primary" size={20} onClick={handleOk} loading={confirmLoading}>
+          <Button type="primary" size={20} onClick={() =>onSubmitStatus()} loading={confirmLoading}>
             Đăng
           </Button>
         </Modal>

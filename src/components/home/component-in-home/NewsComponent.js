@@ -1,4 +1,4 @@
-import React, { createElement, useState } from 'react'
+import React, { createElement, useState , useEffect } from 'react'
 import { Comment, Avatar, Form, Button, List, Input, Tooltip } from 'antd'
 import moment from 'moment'
 import { DislikeOutlined, LikeOutlined, DislikeFilled, LikeFilled } from '@ant-design/icons'
@@ -40,26 +40,26 @@ export default function NewsComponent(props) {
   const { dataNews } = props
   const { content, newsId, userId, createdAt, fullName, comments = [] } = dataNews
 
-  const [data, setData] = useState({ listComment: comments, submitting: false, value: '' })
+  const [dataNew, setDataNew] = useState({ listComment: comments, submitting: false, value: '' })
 
   const [likes, setLikes] = useState(0)
-  const [dislikes, setDislikes] = useState(0)
+  // const [dislikes, setDislikes] = useState(0)
   const [action, setAction] = useState(null)
 
-  const { listComment = [], submitting, value } = data
+  const { listComment , submitting, value } = dataNew
 
   // const { avatar, content, dislike, like, newsId, userId, createdAt ,
   //  fullName, comments : lstCmt = [] } = dataNews
 
   const like = () => {
     setLikes(1)
-    setDislikes(0)
+    // setDislikes(0)
     setAction('liked')
   }
 
   const dislike = () => {
     setLikes(0)
-    setDislikes(1)
+    // setDislikes(1)
     setAction('disliked')
   }
 
@@ -71,19 +71,25 @@ export default function NewsComponent(props) {
         })}
       </Tooltip>
       <span className="comment-action">{likes}</span>
-    </span>,
-    <span key="comment-basic-dislike">
-      <Tooltip title="Dislike">
-        {React.createElement(action === 'disliked' ? DislikeFilled : DislikeOutlined, {
-          onClick: dislike,
-        })}
-      </Tooltip>
-      <span className="comment-action">{dislikes}</span>
-    </span>,
+    </span>
+    // ,
+    // <span key="comment-basic-dislike">
+    //   <Tooltip title="Dislike">
+    //     {React.createElement(action === 'disliked' ? DislikeFilled : DislikeOutlined, {
+    //       onClick: dislike,
+    //     })}
+    //   </Tooltip>
+    //   <span className="comment-action">{dislikes}</span>
+    // </span>,
   ]
 
+  useEffect(()=>{
+    console.log('======lstcmt====',listComment)
+
+  },[listComment])
+
   const handleSubmit = async () => {
-    if (!data.value) {
+    if (!dataNew.value) {
       return
     }
 
@@ -102,13 +108,13 @@ export default function NewsComponent(props) {
       .then((res) => {
         const { data = {} } = res
         const { data: body = {} } = data
-        setData({ ...data, listComment: [...listComment, body] })
+        setDataNew({ ...dataNew, listComment: [...listComment, body], value:'' })
       })
       .catch((err) => console.log('=====err====', err))
   }
 
   const handleChange = (e) => {
-    setData({ ...data, value: e.target.value })
+    setDataNew({ ...dataNew, value: e.target.value })
   }
 
   return (
@@ -130,7 +136,7 @@ export default function NewsComponent(props) {
         }
       >
         <>
-          {comments.length > 0 && <CommentList comments={listComment} />}
+          {listComment && listComment.length > 0 && <CommentList comments={listComment} />}
           <Comment
             avatar={
               <Avatar

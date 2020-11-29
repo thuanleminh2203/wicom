@@ -5,6 +5,8 @@ import UserChatComponent from './component/UserChatComponent'
 import { Row, Col } from 'antd'
 import { ApiRequest } from '../../constant/apiUtils'
 import * as Constant from './../../constant/Constant'
+import moment from 'moment'
+
 // import Socket from '../../socket/Socket'
 // import Socket from '../../socket/socketDemo'
 
@@ -31,13 +33,25 @@ export default function MainHome(props) {
       })
   }
 
+  const handleOk = async (content) => {
+    await ApiRequest.post(Constant.API_NEWS, { content, createdAt: moment().format('DD-MM-YYYY') })
+      .then((res) => {
+        const { data = {} } = res
+        const { data: body = {} } = data
+        setNews([body,...news])
+
+      })
+      .catch((err) => console.log('===er===', err))
+  }
+
+
   return (
     <Fragment>
       <Row>
         <Col span={18}>
-          <StatusComponent />
+          <StatusComponent handleOk={handleOk} />
           {news.map((value) => (
-            <NewsComponent key={value.newsId} dataNews={value} />
+            <NewsComponent key={value.newsId} dataNews={value}  />
           ))}
         </Col>
         <Col span={6}>
