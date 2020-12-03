@@ -1,4 +1,5 @@
 import axios from 'axios'
+
 // import {CONSTANT} from './Constant'
 const varToken = localStorage.getItem('token') ? localStorage.getItem('token') : ''
 // axios.defaults.baseURL = CONSTANT.API
@@ -14,15 +15,15 @@ const getToken = () => {
 }
 
 export const ApiRequest = {}
-
 ApiRequest.get = (url, params = {}) => {
   // console.log('======tokennn', localStorage.getItem('token'))
   // console.log('====token22222222===', varToken)
   return axios.get(url, { params, headers: getToken() })
+  // .catch((err) => console.log('===err code===', history))
 }
 
 ApiRequest.post = (url, data = {}) => {
-  return axios.post(url, data )
+  return axios.post(url, data)
 }
 
 // ApiRequest.post = (url, data = {}) => {

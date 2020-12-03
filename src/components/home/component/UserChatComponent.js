@@ -6,8 +6,7 @@ import { Badge } from 'antd'
 export default function UserChatComponent(props) {
   const { setIsDisplayChat } = props
   const [data, setData] = useState([])
-  const [hover,setHover] = useState(null)
-
+  const [hover, setHover] = useState(null)
 
   useEffect(() => {
     ApiRequest.get(Constant.API_USER_FIND_ALL)
@@ -20,8 +19,8 @@ export default function UserChatComponent(props) {
       .catch((err) => console.log('====errr==' + err))
   }, [])
 
-  function testHover(e){
-    console.log("===event====",e)
+  function testHover(e) {
+    console.log('===event====', e)
     // setHover()
   }
 
@@ -30,32 +29,30 @@ export default function UserChatComponent(props) {
       <div className="UserChatContainer">
         {data.length &&
           data.map((value) => (
-           <div>
+            <div key={value.id}>
               <div
-              className="UserDisplay"
-              key={value.id}
-              onClick={() =>
-                setIsDisplayChat({
-                  idReceive: value.id,
-                  username: value.username,
-                  fullname: value.fullName,
-                })
-              }
-              // onMouseEnter={() => setHover(true)}
-              // onMouseLeave={() => setHover(false)}
-
-            >
-            <Badge count={5} offset={[10, 10]} >
-              <div>
-                <img
-                  src="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png"
-                  alt="Cant not display"
-                />
-                <span className="Username">{value.fullName}</span>
+                className="UserDisplay"
+                onClick={() =>
+                  setIsDisplayChat({
+                    idReceive: value.id,
+                    username: value.username,
+                    fullname: value.fullName,
+                  })
+                }
+                // onMouseEnter={() => setHover(true)}
+                // onMouseLeave={() => setHover(false)}
+              >
+                <Badge count={5} offset={[10, 10]}>
+                  <div>
+                    <img
+                      src="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png"
+                      alt="Cant not display"
+                    />
+                    <span className="Username">{value.fullName}</span>
+                  </div>
+                </Badge>
               </div>
-            </Badge>
             </div>
-           </div>
           ))}
       </div>
     </>

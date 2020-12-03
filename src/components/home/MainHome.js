@@ -38,12 +38,10 @@ export default function MainHome(props) {
       .then((res) => {
         const { data = {} } = res
         const { data: body = {} } = data
-        setNews([body,...news])
-
+        setNews([body, ...news])
       })
       .catch((err) => console.log('===er===', err))
   }
-
 
   return (
     <Fragment>
@@ -51,7 +49,7 @@ export default function MainHome(props) {
         <Col span={18}>
           <StatusComponent handleOk={handleOk} />
           {news.map((value) => (
-            <NewsComponent key={value.newsId} dataNews={value}  />
+            <NewsComponent key={value.newsId} dataNews={value} />
           ))}
         </Col>
         <Col span={6}>

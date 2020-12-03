@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from 'react'
 import InputComponents from './../../../components-utils/InputComponent'
 import { SendOutlined, CloseOutlined } from '@ant-design/icons'
-import { Row, Col  } from 'antd'
+import { Row, Col } from 'antd'
 import { ApiRequest } from '../../../constant/apiUtils'
 import * as Constant from '../../../constant/Constant'
 import { connect } from '../../../socket/SockJSClientBackup'
@@ -43,7 +43,7 @@ export default function ChatComponent(props) {
   }, [dataSocket])
 
   function connectSocket() {
-    stompClient = connect(stompClient)
+    stompClient = connect()
     stompClient.connect(
       {},
       () => {
@@ -85,57 +85,57 @@ export default function ChatComponent(props) {
   }
 
   return (
-      <div className="ChatContainer">
-        <div className="ChatHeader">
-          <img src={data.src} alt="Cant not display" />
-          <span className="Username">{isDisplayChat.fullname}</span>
-          <CloseOutlined
-            style={{ fontSize: '16px', color: '#fff', paddingLeft: '173px' }}
-            onClick={() => setIsDisplayChat(null)}
-          />
-        </div>
-        <hr className="LineContainer" />
-        <div className="ChatContent">
-          {dataMess &&
-            dataMess.length > 0 &&
-            dataMess.map((element) => (
-              <div
-                key={element.messageId}
-                style={{ display: 'flex', position: 'relative', minHeight: '25px' }}
-              >
-                <p
-                  style={{ float: 'right' }}
-                  className={`${parseInt(myId) === parseInt(element.idSend) ? 'MyMessage' : ''}`}
-                >
-                  {element.content}
-                </p>
-              </div>
-            ))}
-        </div>
-        <hr className="LineContainer" />
-        <Row>
-          <Col span={20}>
-            <InputComponents
-              style={{
-                backgroundColor: '#3e4042',
-                color: '#ffffff',
-                borderRadius: '2%',
-                overflowY: 'scroll',
-                height: '32px',
-              }}
-              type="textarea"
-              dataInput={dataInput}
-              setDataInput={setDataInput}
-              value={content}
-              name="content"
-              span={24}
-              sendMessageSocket={sendMessageSocket}
-            />
-          </Col>
-          <Col span={4}>
-            <SendOutlined style={{ fontSize: '23px', color: '#1890ff' }} />
-          </Col>
-        </Row>
+    <div className="ChatContainer">
+      <div className="ChatHeader">
+        <img src={data.src} alt="Cant not display" />
+        <span className="Username">{isDisplayChat.fullname}</span>
+        <CloseOutlined
+          style={{ fontSize: '16px', color: '#fff', paddingLeft: '173px' }}
+          onClick={() => setIsDisplayChat(null)}
+        />
       </div>
+      <hr className="LineContainer" />
+      <div className="ChatContent">
+        {dataMess &&
+          dataMess.length > 0 &&
+          dataMess.map((element) => (
+            <div
+              key={element.messageId}
+              style={{ display: 'flex', position: 'relative', minHeight: '25px' }}
+            >
+              <p
+                style={{ float: 'right' }}
+                className={`${parseInt(myId) === parseInt(element.idSend) ? 'MyMessage' : ''}`}
+              >
+                {element.content}
+              </p>
+            </div>
+          ))}
+      </div>
+      <hr className="LineContainer" />
+      <Row>
+        <Col span={20}>
+          <InputComponents
+            style={{
+              backgroundColor: '#3e4042',
+              color: '#ffffff',
+              borderRadius: '2%',
+              overflowY: 'scroll',
+              height: '32px',
+            }}
+            type="textarea"
+            dataInput={dataInput}
+            setDataInput={setDataInput}
+            value={content}
+            name="content"
+            span={24}
+            sendMessageSocket={sendMessageSocket}
+          />
+        </Col>
+        <Col span={4}>
+          <SendOutlined style={{ fontSize: '23px', color: '#1890ff' }} />
+        </Col>
+      </Row>
+    </div>
   )
 }

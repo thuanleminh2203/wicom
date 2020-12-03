@@ -1,13 +1,15 @@
 import SockJS from 'sockjs-client/dist/sockjs'
 import Stomp from 'stompjs'
 
-// let stompClient = null
+let stompClient = null
 // const subscription = null
 
 // connect
-function connect(stompClient) {
-  const socket = new SockJS('http://localhost:8080/ws')
-  stompClient = Stomp.over(socket)
+function connect() {
+  if (!stompClient) {
+    const socket = new SockJS('http://localhost:8080/ws')
+    stompClient = Stomp.over(socket)
+  }
 
   //   stompClient.connect(
   //     {},

@@ -6,7 +6,7 @@ import { ApiRequest } from '../../../constant/apiUtils'
 import * as Constant from './../../../constant/Constant'
 
 const StatusComponent = (props) => {
-  const {handleOk} = props
+  const { handleOk } = props
   const [dataModal, setDataModal] = useState({
     modalText: 'Content of the modal haha',
     title: 'Tạo bài viết',
@@ -44,12 +44,11 @@ const StatusComponent = (props) => {
       visible: false,
     })
   }
-  
-  async function onSubmitStatus(){
+
+  async function onSubmitStatus() {
     await handleOk(content)
     setDataInput({ content: '' })
     handleCancel()
-
   }
   const contentModal = () => (
     <InputComponents
@@ -100,7 +99,12 @@ const StatusComponent = (props) => {
             name="content"
             value={content}
           />
-          <Button type="primary" size={20} onClick={() =>onSubmitStatus()} loading={confirmLoading}>
+          <Button
+            type="primary"
+            size={20}
+            onClick={() => onSubmitStatus()}
+            loading={confirmLoading}
+          >
             Đăng
           </Button>
         </Modal>

@@ -1,9 +1,10 @@
-import React, { createElement, useState , useEffect } from 'react'
+import React, { createElement, useState, useEffect } from 'react'
 import { Comment, Avatar, Form, Button, List, Input, Tooltip } from 'antd'
 import moment from 'moment'
 import { DislikeOutlined, LikeOutlined, DislikeFilled, LikeFilled } from '@ant-design/icons'
 import { ApiRequest } from '../../../constant/apiUtils'
 import * as Constant from './../../../constant/Constant'
+import { connect } from '../../../socket/SockJSClientBackup'
 
 const { TextArea } = Input
 
@@ -46,7 +47,7 @@ export default function NewsComponent(props) {
   // const [dislikes, setDislikes] = useState(0)
   const [action, setAction] = useState(null)
 
-  const { listComment , submitting, value } = dataNew
+  const { listComment = [], submitting, value } = dataNew
 
   // const { avatar, content, dislike, like, newsId, userId, createdAt ,
   //  fullName, comments : lstCmt = [] } = dataNews
@@ -71,7 +72,7 @@ export default function NewsComponent(props) {
         })}
       </Tooltip>
       <span className="comment-action">{likes}</span>
-    </span>
+    </span>,
     // ,
     // <span key="comment-basic-dislike">
     //   <Tooltip title="Dislike">
@@ -83,10 +84,9 @@ export default function NewsComponent(props) {
     // </span>,
   ]
 
-  useEffect(()=>{
-    console.log('======lstcmt====',listComment)
-
-  },[listComment])
+  useEffect(() => {
+    console.log('======lstcmt====', listComment)
+  }, [listComment])
 
   const handleSubmit = async () => {
     if (!dataNew.value) {
@@ -98,7 +98,6 @@ export default function NewsComponent(props) {
     // setData({ ...data, submitting: false })
   }
 
-  // console.log('===comment===', lstCmt)
   async function onComment() {
     await ApiRequest.post(Constant.API_COMMENT, {
       newsId,
@@ -108,7 +107,12 @@ export default function NewsComponent(props) {
       .then((res) => {
         const { data = {} } = res
         const { data: body = {} } = data
-        setDataNew({ ...dataNew, listComment: [...listComment, body], value:'' })
+        console.log('====listComment====', listComment)
+        if (listComment) {
+          setDataNew({ ...dataNew, listComment: [...listComment, body], value: '' })
+        } else {
+          setDataNew({ ...dataNew, listComment: [body], value: '' })
+        }
       })
       .catch((err) => console.log('=====err====', err))
   }
@@ -120,7 +124,7 @@ export default function NewsComponent(props) {
   return (
     <div className="NewsContainer">
       <Comment
-        actions={actions}
+        // actions={actions}
         author={<a className="UserNameContainer">{fullName}</a>}
         avatar={
           <Avatar

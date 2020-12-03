@@ -24,6 +24,10 @@ const MyPageComponent = Loadable({
   loader: () => import('./pages/MyPage'),
   loading: () => null,
 })
+const Error404 = Loadable({
+  loader: () => import('./pages/Error404'),
+  loading: () => null,
+})
 
 // let stompClient = null
 // stompClient = connect(stompClient)
@@ -79,7 +83,7 @@ function App() {
           <Route path="/login" exact component={Login} />
           <Route path="/home" exact component={LayoutComponent} />
           <Route path="/mypage" exact component={MyPageComponent} />
-          {/* <Route component={Error404} /> */}
+          <Route component={Error404} />
         </Switch>
       </Router>
     </div>
