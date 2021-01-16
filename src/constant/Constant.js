@@ -10,6 +10,7 @@ export const API_MESS = API + '/message/'
 export const API_USER = API + '/user'
 export const API_USER_FIND_ALL = API_USER + '/find-all'
 export const API_USER_SEARCH = API + '/user/search-by-name/'
+export const API_USER_DETAIL = API + '/user/my-info/'
 
 //news
 export const API_NEWS = API + '/news'

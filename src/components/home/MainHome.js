@@ -33,8 +33,12 @@ export default function MainHome(props) {
       })
   }
 
-  const handleOk = async (content) => {
-    await ApiRequest.post(Constant.API_NEWS, { content, createdAt: moment().format('DD-MM-YYYY') })
+  const handleOk = async (content, url) => {
+    await ApiRequest.post(Constant.API_NEWS, {
+      content,
+      url,
+      createdAt: moment().format('DD-MM-YYYY'),
+    })
       .then((res) => {
         const { data = {} } = res
         const { data: body = {} } = data

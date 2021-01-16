@@ -14,7 +14,7 @@ const data = {
   src: 'https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png',
 }
 
-const dataSocket = null
+// const dataSocket = null
 let stompClient = null
 let subscription = null
 
@@ -28,7 +28,7 @@ export default function ChatComponent(props) {
   const { username, idReceive } = isDisplayChat
   const [dataSocket, setDataSocket] = useState(null)
   const { content } = dataInput
-
+  console.log('=======isDisplayChat====', isDisplayChat)
   useEffect(() => {
     connectSocket()
     // console.log('=====????====', subscription)
@@ -57,7 +57,6 @@ export default function ChatComponent(props) {
   }
 
   function sendMessageSocket() {
-    console.log('==content===', content.length)
     if (content.length) {
       stompClient.send(
         '/app/message',
@@ -87,22 +86,25 @@ export default function ChatComponent(props) {
   return (
     <div className="ChatContainer">
       <div className="ChatHeader">
-        <img src={data.src} alt="Cant not display" />
-        <span className="Username">{isDisplayChat.fullname}</span>
-        <CloseOutlined
-          style={{ fontSize: '16px', color: '#fff', paddingLeft: '173px' }}
-          onClick={() => setIsDisplayChat(null)}
-        />
+        <Row style={{ width: '100%' }}>
+          <Col span={22}>
+            <img src={isDisplayChat.avatar} alt="Cant not display" />
+            <span className="Username">{isDisplayChat.fullname}</span>
+          </Col>
+          <Col span={2}>
+            <CloseOutlined
+              style={{ fontSize: '16px', color: '#fff' }}
+              onClick={() => setIsDisplayChat(null)}
+            />
+          </Col>
+        </Row>
       </div>
       <hr className="LineContainer" />
       <div className="ChatContent">
         {dataMess &&
           dataMess.length > 0 &&
-          dataMess.map((element) => (
-            <div
-              key={element.messageId}
-              style={{ display: 'flex', position: 'relative', minHeight: '25px' }}
-            >
+          dataMess.map((element, index) => (
+            <div key={index} style={{ display: 'flex', position: 'relative', minHeight: '25px' }}>
               <p
                 style={{ float: 'right' }}
                 className={`${parseInt(myId) === parseInt(element.idSend) ? 'MyMessage' : ''}`}
@@ -133,7 +135,10 @@ export default function ChatComponent(props) {
           />
         </Col>
         <Col span={4}>
-          <SendOutlined style={{ fontSize: '23px', color: '#1890ff' }} />
+          <SendOutlined
+            onClick={sendMessageSocket}
+            style={{ fontSize: '23px', color: '#1890ff' }}
+          />
         </Col>
       </Row>
     </div>

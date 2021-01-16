@@ -1,21 +1,46 @@
 .ProfileUserContainer{
+    h2, .TextName{
+        text-align: center;
+    }
     .InforContainer{
         text-align: left;
 
     }
     .InforDetailContainer {
         align-items: center;
+        margin-left: 50%;
+        transform: translateX(-50%);
+        input {
+            padding-left: 3%;
+            border-radius: 6px !important;
+        }
     }
     .AvatarContainer{
         border: 2px solid black;
-        border-radius: 50%;
+        // border-radius: 50%;
+        border: none;
         width: 175px;
         text-align: center;
         margin: auto;
+       
     }
     .TextName{
         font-weight: 300;
         font-size: 20px;
         text-transform: uppercase;
+    }
+    .LabelInforContainer {
+        // text-align: center;
+        color: #ffffff;
+    }
+    .ButtonUploadContainer {
+        span{
+            color: black;
+        }
+        text-align: center;
+        margin-bottom: 25px;
+        .ant-upload-list{
+            display: none !important;
+        }
     }
 }

@@ -1,10 +1,11 @@
 import React, { useState } from 'react'
 import InputComponents from '../../../components-utils/InputComponent'
-import { Modal, Button } from 'antd'
-import moment from 'moment'
-import { ApiRequest } from '../../../constant/apiUtils'
-import * as Constant from './../../../constant/Constant'
+import { Modal, Button, Upload } from 'antd'
+import { UploadOutlined } from '@ant-design/icons'
+import axios from 'axios'
 
+// const varToken = localStorage.getItem('token') ? localStorage.getItem('token') : ''
+// const token = `Bearer ${varToken}`
 const StatusComponent = (props) => {
   const { handleOk } = props
   const [dataModal, setDataModal] = useState({
@@ -14,29 +15,9 @@ const StatusComponent = (props) => {
     confirmLoading: false,
   })
   const [dataInput, setDataInput] = useState({ content: '' })
+  const [file, setFile] = useState(null)
   const { content } = dataInput
-  const { modalText, title, visible, confirmLoading } = dataModal
-
-  // const handleOk = () => {
-  //   setDataModal({
-  //     ...dataModal,
-  //     modalText: 'The modal will be closed after two seconds',
-  //     confirmLoading: true,
-  //   })
-  //   setTimeout(() => {
-  //     setDataModal({
-  //       ...dataModal,
-  //       visible: false,
-  //       confirmLoading: false,
-  //     })
-  //   }, 2000)
-  // }
-
-  // const handleOk = async () => {
-  //   await ApiRequest.post(Constant.API_NEWS, { content, createdAt: moment().format('DD-MM-YYYY') })
-  //     .then((res) => console.log('===res===', res))
-  //     .catch((err) => console.log('===er===', err))
-  // }
+  const { title, visible, confirmLoading } = dataModal
 
   const handleCancel = () => {
     setDataModal({
@@ -46,7 +27,27 @@ const StatusComponent = (props) => {
   }
 
   async function onSubmitStatus() {
-    await handleOk(content)
+    // e.preventDefault()
+    let url = null
+    if (file) {
+      const formData = new FormData()
+      // var imagefile = document.querySelector('#file')
+      formData.append('files', file)
+      await axios
+        .post('http://localhost:8080/api/v1/file', formData, {
+          headers: {
+            'Content-Type': 'multipart/form-data',
+          },
+        })
+        .then((res) => {
+          const { data = {} } = res
+          const { data: body = {} } = data
+          url = body
+        })
+        .catch((err) => console.log('=====err===', err))
+    }
+
+    await handleOk(content, url)
     setDataInput({ content: '' })
     handleCancel()
   }
@@ -62,6 +63,11 @@ const StatusComponent = (props) => {
       type="textarea"
     />
   )
+
+  const handleUpload = ({ fileList }) => {
+    console.log('fileList', fileList[0].originFileObj)
+    setFile(fileList[0].originFileObj)
+  }
 
   return (
     <>
@@ -99,10 +105,20 @@ const StatusComponent = (props) => {
             name="content"
             value={content}
           />
+          <Upload
+            beforeUpload={() => false}
+            onChange={handleUpload}
+            action={() => {}}
+            multiple={false}
+          >
+            <Button icon={<UploadOutlined />} disabled={file ? true : false}>
+              Click to Upload
+            </Button>
+          </Upload>
           <Button
             type="primary"
             size={20}
-            onClick={() => onSubmitStatus()}
+            onClick={(e) => onSubmitStatus(e)}
             loading={confirmLoading}
           >
             Đăng

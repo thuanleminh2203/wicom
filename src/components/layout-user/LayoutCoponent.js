@@ -1,16 +1,13 @@
 import React, { useState } from 'react'
-import { Layout, Menu, Avatar } from 'antd'
+import { Layout, Menu } from 'antd'
 import {
   HomeOutlined,
   UsergroupDeleteOutlined,
   ProjectOutlined,
   UserOutlined,
 } from '@ant-design/icons'
-// import { Link, useHistory } from 'react-router-dom'
-// import { BrowserRouter as Router, Switch, Route, useRouteMatch } from 'react-router-dom'
-// import MyPageComponents from '../mypage/MyPageComponent'
+import { LogoutOutlined } from '@ant-design/icons'
 import ProfileUser from './profile/ProfileUser'
-// import StatusComponent from '../home/component-in-home/StatusComponent'
 import MainHome from '../home/MainHome'
 import ChatComponent from '../home/component/ChatComponent'
 import ManagerPjComponent from '../project-manager/ManagerPjComponent'
@@ -20,10 +17,10 @@ const data = [
     key: '1',
     component: <HomeOutlined style={{ fontSize: '28px' }} />,
   },
-  {
-    key: '2',
-    component: <UsergroupDeleteOutlined style={{ fontSize: '28px' }} />,
-  },
+  // {
+  //   key: '2',
+  //   component: <UsergroupDeleteOutlined style={{ fontSize: '28px' }} />,
+  // },
   {
     key: '3',
     component: <ProjectOutlined style={{ fontSize: '28px' }} />,
@@ -34,22 +31,17 @@ const data = [
   },
 ]
 const { Header, Content } = Layout
-const src = 'https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png'
 
 const LayoutComponent = () => {
   const [idSelect, setIdSelect] = useState('1')
   const [isDisplayChat, setIsDisplayChat] = useState(null)
 
-  // useEffect(() => {
-  //   return () => setIsDisplayChat(false)
-  // })
-
   const switchBody = (key) => {
     switch (key) {
       case '1':
         return <MainHome setIsDisplayChat={setIsDisplayChat} isDisplayChat={isDisplayChat} />
-      case '2':
-        return <h1>22222222222222222</h1>
+      // case '2':
+      //   return <h1>22222222222222222</h1>
       case '3':
         return <ManagerPjComponent />
       case '4':
@@ -58,6 +50,11 @@ const LayoutComponent = () => {
       default:
         return <h1>222222</h1>
     }
+  }
+
+  function onLogout() {
+    localStorage.removeItem('token')
+    window.location.href = 'http://localhost:3000'
   }
   return (
     <Layout className="UserHomeContainer">
@@ -71,7 +68,7 @@ const LayoutComponent = () => {
         }}
       >
         <div className="logo">WicomLab</div>
-        <Menu theme="dark" mode="horizontal" defaultSelectedKeys={['3']}>
+        <Menu theme="dark" mode="horizontal" defaultSelectedKeys={['1']}>
           {data.map((value) => (
             <Menu.Item key={value.key} onClick={(e) => setIdSelect(e.key)}>
               {value.component}
@@ -80,7 +77,7 @@ const LayoutComponent = () => {
         </Menu>
         <div className="ToolHeaderContainer">
           <div>
-            <Avatar src={src} size={40} />
+            {/* <Avatar src={src} size={40} /> */}
             <span
               style={{
                 color: '#fff',
@@ -91,6 +88,10 @@ const LayoutComponent = () => {
             >
               {localStorage.getItem('fullName')}
             </span>
+            <LogoutOutlined
+              onClick={() => onLogout()}
+              style={{ color: 'white', paddingLeft: '12px', cursor: 'pointer' }}
+            />
           </div>
         </div>
       </Header>

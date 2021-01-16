@@ -15,7 +15,11 @@ const CommentList = ({ comments }) => (
     renderItem={(comment) => (
       <Comment
         author={comment.fullName}
-        avatar="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png"
+        avatar={
+          comment.avatar
+            ? comment.avatar
+            : 'https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png'
+        }
         content={comment.content}
         datetime={comment.createdAt}
         style={{ color: 'white' }}
@@ -27,11 +31,17 @@ const CommentList = ({ comments }) => (
 const Editor = ({ onChange, onSubmit, submitting, value }) => (
   <>
     <Form.Item>
-      <TextArea rows={4} onChange={onChange} value={value} />
+      <TextArea rows={3} onChange={onChange} value={value} bordered={false} />
     </Form.Item>
     <Form.Item>
-      <Button htmlType="submit" loading={submitting} onClick={onSubmit} type="primary">
-        Add Comment
+      <Button
+        htmlType="submit"
+        loading={submitting}
+        onClick={onSubmit}
+        size="middle"
+        type="primary"
+      >
+        Gửi
       </Button>
     </Form.Item>
   </>
@@ -39,65 +49,38 @@ const Editor = ({ onChange, onSubmit, submitting, value }) => (
 
 export default function NewsComponent(props) {
   const { dataNews } = props
-  const { content, newsId, userId, createdAt, fullName, comments = [] } = dataNews
+  const { content, newsId, userId, createdAt, fullName, comments = [], url, avatar } = dataNews
 
   const [dataNew, setDataNew] = useState({ listComment: comments, submitting: false, value: '' })
 
-  const [likes, setLikes] = useState(0)
-  // const [dislikes, setDislikes] = useState(0)
-  const [action, setAction] = useState(null)
-
   const { listComment = [], submitting, value } = dataNew
-
-  // const { avatar, content, dislike, like, newsId, userId, createdAt ,
-  //  fullName, comments : lstCmt = [] } = dataNews
-
-  const like = () => {
-    setLikes(1)
-    // setDislikes(0)
-    setAction('liked')
-  }
-
-  const dislike = () => {
-    setLikes(0)
-    // setDislikes(1)
-    setAction('disliked')
-  }
-
-  const actions = [
-    <span key="comment-basic-like">
-      <Tooltip title="Like">
-        {createElement(action === 'liked' ? LikeFilled : LikeOutlined, {
-          onClick: like,
-        })}
-      </Tooltip>
-      <span className="comment-action">{likes}</span>
-    </span>,
-    // ,
-    // <span key="comment-basic-dislike">
-    //   <Tooltip title="Dislike">
-    //     {React.createElement(action === 'disliked' ? DislikeFilled : DislikeOutlined, {
-    //       onClick: dislike,
-    //     })}
-    //   </Tooltip>
-    //   <span className="comment-action">{dislikes}</span>
-    // </span>,
-  ]
-
-  useEffect(() => {
-    console.log('======lstcmt====', listComment)
-  }, [listComment])
-
+  const [avatarCmt, setAvatarCmt] = useState(null)
   const handleSubmit = async () => {
     if (!dataNew.value) {
       return
     }
-
-    // setData({ ...data, submitting: true })
     await onComment()
-    // setData({ ...data, submitting: false })
   }
+  useEffect(() => {
+    getInfor()
+  }, [])
 
+  async function getInfor() {
+    await ApiRequest.get(Constant.API_USER_DETAIL)
+      .then((res) => {
+        const { data = {} } = res
+        const { data: body = {} } = data
+        const { avatarUrl } = body
+        setAvatarCmt(avatarUrl)
+        // setDataApi(body)
+      })
+      .catch((err) => {
+        // const { response = {} } = err
+        // const { data = {} } = response
+        // const { mess = '' } = data
+        // toast.error(mess)
+      })
+  }
   async function onComment() {
     await ApiRequest.post(Constant.API_COMMENT, {
       newsId,
@@ -107,11 +90,12 @@ export default function NewsComponent(props) {
       .then((res) => {
         const { data = {} } = res
         const { data: body = {} } = data
-        console.log('====listComment====', listComment)
+        const resData = { ...body, avatar: avatarCmt }
+        // console.log('====listComment====', listComment)
         if (listComment) {
-          setDataNew({ ...dataNew, listComment: [...listComment, body], value: '' })
+          setDataNew({ ...dataNew, listComment: [...listComment, resData], value: '' })
         } else {
-          setDataNew({ ...dataNew, listComment: [body], value: '' })
+          setDataNew({ ...dataNew, listComment: [resData], value: '' })
         }
       })
       .catch((err) => console.log('=====err====', err))
@@ -120,45 +104,63 @@ export default function NewsComponent(props) {
   const handleChange = (e) => {
     setDataNew({ ...dataNew, value: e.target.value })
   }
-
+  console.log('====listComment===', listComment)
   return (
     <div className="NewsContainer">
-      <Comment
-        // actions={actions}
-        author={<a className="UserNameContainer">{fullName}</a>}
-        avatar={
-          <Avatar
-            src="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png"
-            alt={fullName}
-          />
-        }
-        content={<p>{content}</p>}
-        datetime={
-          <Tooltip title={createdAt}>
-            <span>{moment().fromNow()}</span>
-          </Tooltip>
-        }
-      >
-        <>
-          {listComment && listComment.length > 0 && <CommentList comments={listComment} />}
-          <Comment
-            avatar={
-              <Avatar
-                src="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png"
-                alt={fullName}
-              />
-            }
-            content={
-              <Editor
-                onChange={(e) => handleChange(e)}
-                onSubmit={() => handleSubmit()}
-                submitting={submitting}
-                value={value}
-              />
-            }
-          />
-        </>
-      </Comment>
+      <div style={{ marginLeft: '3%' }}>
+        <Comment
+          // actions={actions}
+          author={<a className="UserNameContainer">{fullName}</a>}
+          avatar={
+            <Avatar
+              src={
+                avatar
+                  ? avatar
+                  : 'https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.pngavatar'
+              }
+              alt={fullName}
+            />
+          }
+          content={
+            <>
+              <div>
+                <img style={{ width: '30%' }} src={url} />
+              </div>
+              <p>{content}</p>
+            </>
+          }
+          datetime={
+            <Tooltip title={createdAt}>
+              <span>{createdAt}</span>
+            </Tooltip>
+          }
+        >
+          <>
+            {listComment && listComment.length > 0 && <CommentList comments={listComment} />}
+            <Comment
+              avatar={
+                <Avatar
+                  src={
+                    avatarCmt
+                      ? avatarCmt
+                      : 'https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png'
+                  }
+                  alt={fullName}
+                />
+              }
+              content={
+                <Editor
+                  // className="CommentContainer"
+                  onChange={(e) => handleChange(e)}
+                  onSubmit={() => handleSubmit()}
+                  submitting={submitting}
+                  value={value}
+                />
+              }
+            />
+          </>
+        </Comment>
+      </div>
     </div>
   )
 }

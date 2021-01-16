@@ -15,10 +15,11 @@ const InputComponents = (props) => {
     maxValue,
     isNumber = false,
     sendMessageSocket,
+    disabled,
   } = props
   const { min, max, style } = props
   const { setDataInput, dataInput, err, value: valueProps, placeholder = '' } = props
-  // console.log('===dataInput===', valueProps)
+  // console.log('===disabled===', valueProps)
 
   // function onEnterTextArea(e) {
   //   console.log('====event====', e)
@@ -67,6 +68,7 @@ const InputComponents = (props) => {
               value={valueProps}
               autoComplete="off"
               placeholder={placeholder}
+              disabled={disabled}
             />
             {err[name] && <span className="ValidateInput">{err[name]}</span>}
           </>
@@ -117,6 +119,7 @@ const InputComponents = (props) => {
               value={valueProps}
               autoComplete="off"
               placeholder={placeholder}
+              disabled={disabled}
             />
             {err[name] && <p className="ValidateInput">{err[name]}</p>}
           </>

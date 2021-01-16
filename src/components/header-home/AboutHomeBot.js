@@ -35,9 +35,9 @@ const AboutHomeBot = () => {
             <div className="BoxAboutDetails">
               <div>
                 <img src={value.iconUrl} alt="null" />
-                <h3>{value.title}</h3>
+                <h3 style={{ color: 'black' }}>{value.title}</h3>
                 <hr />
-                <p>{value.content}</p>
+                <p style={{ color: 'black', width: '60%', margin: 'auto' }}>{value.content}</p>
               </div>
             </div>
           </Col>

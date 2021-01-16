@@ -7,7 +7,7 @@ import { DatePicker, Col } from 'antd'
 import LabelComponent from '../../components-utils/LabelComponent'
 import InputComponents from '../../components-utils/InputComponent'
 import FormContainer from '../../components-utils/FormContainer'
-import { Button } from 'antd'
+import { Button, Modal } from 'antd'
 import TagMemberJoinProject from './TagMemberJoinProject'
 import { ApiRequest } from '../../constant/apiUtils'
 import moment from 'moment'
@@ -140,19 +140,34 @@ export default function ManagerPjComponent() {
   const [err, setErr] = useState({})
   const [dataChart, setDataChart] = useState(options)
   const [dataInput, setDataInput] = useState({
+    projectId: '',
     namePj: '',
     deadline: [],
     members: [],
     completed: '',
   })
-  const { namePj, deadline, members, completed } = dataInput
+  const { namePj, deadline, members, completed, projectId } = dataInput
   const { series = [] } = dataChart
   const [id, setId] = useState(null)
+  const [isModalVisible, setIsModalVisible] = useState(false)
 
   function onClickChart(e) {
+    const { point = {} } = e || {}
+    const { options = {} } = point || {}
+    const { name = '', id = '', owner = '', start = '', end = '', completed = {} } = options || {}
+    const { amount = '' } = completed || {}
+    setDataInput({
+      ...dataInput,
+      projectId: id,
+      namePj: name,
+      completed: amount * 100,
+      deadline: [moment(start), moment(end)],
+      members: owner && owner.split(','),
+    })
     setId(e.point.id)
-    // console.log('=====data====', getProjectById(e.point.id))
+    // console.log('=====data====', owner.split(','))
   }
+  // console.log('=====data====', members)
 
   const onChangeData = (e) => {
     if (e) {
@@ -193,10 +208,6 @@ export default function ManagerPjComponent() {
   useEffect(() => {
     getLstProject()
   }, [])
-
-  // useEffect(() => {
-  //   console.log('====???????????=========', dataChart)
-  // }, [dataChart])
 
   async function getLstProject() {
     await ApiRequest.get(Constant.API_PROJECT)
@@ -244,6 +255,16 @@ export default function ManagerPjComponent() {
 
   // console.log('====errr when sublit====', dataInput)
 
+  const onClearData = () => {
+    setDataInput({
+      projectId: '',
+      namePj: '',
+      deadline: [],
+      members: [],
+      completed: '',
+    })
+  }
+
   const onSubmitData = async () => {
     const error = {}
     if (!namePj) {
@@ -266,9 +287,9 @@ export default function ManagerPjComponent() {
     const endTime = deadline[1].valueOf()
 
     await ApiRequest.post(Constant.API_PROJECT, {
-      projectId: null,
+      projectId,
       projectName: namePj,
-      owner: concatMember(members),
+      owner: !members ? members : concatMember(members),
       completed,
       startTime: moment(startTime).format('DD-MM-YYYY'),
       endTime: moment(endTime).format('DD-MM-YYYY'),
@@ -283,7 +304,7 @@ export default function ManagerPjComponent() {
             {
               name: namePj,
               id: body.projectId,
-              owner: concatMember(members),
+              owner: !members ? members : concatMember(members),
               completed: {
                 amount: completed / 100,
               },
@@ -293,11 +314,58 @@ export default function ManagerPjComponent() {
           ],
         }
         setDataChart({ series: [...series, option] })
-        setDataInput({ ...dataInput, namePj: '', deadline: [], members: [], completed: '' })
-        toast.success('Thêm mới dữ diệu thành công')
+        setDataInput({
+          ...dataInput,
+          projectId: '',
+          namePj: '',
+          deadline: [],
+          members: [],
+          completed: '',
+        })
+        toast.success(!projectId ? 'Thêm mới dữ diệu thành công' : 'Cập nhật dữ diệu thành công')
       })
       .catch((err) => {
         toast.error('Thêm mới dữ diệu thất bại')
+        console.log('====error===', err)
+      })
+  }
+
+  const onDelete = async () => {
+    await ApiRequest.delete(Constant.API_PROJECT + '/' + projectId)
+      .then((res) => {
+        const { data = {} } = res
+        const { data: body = {} } = data
+        // const option = {
+        //   id: body.projectId,
+        //   name: namePj,
+        //   data: [
+        //     {
+        //       name: namePj,
+        //       id: body.projectId,
+        //       owner: !members ? members : concatMember(members),
+        //       completed: {
+        //         amount: completed / 100,
+        //       },
+        //       start: startTime,
+        //       end: endTime,
+        //     },
+        //   ],
+        // }
+        // setDataChart({ series: [...series, option] })
+        getLstProject()
+        setDataInput({
+          ...dataInput,
+          projectId: '',
+          namePj: '',
+          deadline: [],
+          members: [],
+          completed: '',
+        })
+        setIsModalVisible(false)
+        toast.success('Xóa dữ diệu thành công')
+      })
+      .catch((err) => {
+        toast.error('Xóa dữ diệu thất bại')
         console.log('====error===', err)
       })
   }
@@ -393,9 +461,39 @@ export default function ManagerPjComponent() {
 
           <div className="ProjectButton">
             <Button onClick={onSubmitData} type="primary">
-              Add new task
+              {!projectId ? 'Thêm Task' : 'Cập nhật Task'}
             </Button>
+            {projectId && (
+              <>
+                <Button onClick={onClearData} type="primary" style={{ marginLeft: '10px' }}>
+                  Hủy
+                </Button>
+                <Button
+                  onClick={() => setIsModalVisible(true)}
+                  type="primary"
+                  style={{ marginLeft: '10px' }}
+                  danger
+                >
+                  Xóa Task
+                </Button>
+              </>
+            )}
           </div>
+          <Modal
+            title="Thông báo"
+            visible={isModalVisible}
+            onOk={onDelete}
+            onCancel={() => setIsModalVisible(false)}
+          >
+            <div
+              style={{ textAlign: 'center', padding: '5%', fontSize: '14px', fontWeight: '600' }}
+            >
+              <div>
+                Bạn có chắc muốn xóa Project <span>{namePj}</span>
+              </div>
+              <div>Dữ liệu sẽ bị mất và không thể phục hồi</div>
+            </div>
+          </Modal>
         </div>
       </div>
     </div>

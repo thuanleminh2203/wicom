@@ -26,6 +26,10 @@ ApiRequest.post = (url, data = {}) => {
   return axios.post(url, data)
 }
 
+ApiRequest.delete = (url) => {
+  return axios.delete(url)
+}
+
 // ApiRequest.post = (url, data = {}) => {
 //   axios
 //     .post(url, data)

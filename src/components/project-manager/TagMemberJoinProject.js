@@ -6,6 +6,7 @@ import { PlusOutlined } from '@ant-design/icons'
 export default function TagMemberJoinProject(props) {
   const { members, setDataInput, dataInput } = props
   const [state, setState] = useState({
+    // tags: ['members','a'],
     tags: members,
     inputVisible: false,
     inputValue: '',
@@ -25,7 +26,11 @@ export default function TagMemberJoinProject(props) {
     setState({ tags })
     setDataInput({ ...dataInput, members: tags })
   }
+  console.log('=====data====', tags)
 
+  useEffect(() => {
+    members.length > 0 ? setState({ ...state, tags: members }) : setState({ ...state, tags: [] })
+  }, [members])
   const showInput = () => {
     setState({ ...state, inputVisible: true })
   }
@@ -63,22 +68,7 @@ export default function TagMemberJoinProject(props) {
     })
   }
 
-  // const mockVal = (str, repeat = 1) => {
-  //   return {
-  //     key: random(10),
-  //     value: str.repeat(repeat),
-  //   }
-  // }
-
-  // const onSearch = (searchText) => {
-  //   console.log('===value===', searchText)
-  //   setOptions(
-  //     !searchText ? [] : [mockVal(searchText), mockVal(searchText, 2), mockVal(searchText, 3)]
-  //   )
-  // }
-
   const onSelect = (value) => {
-    console.log('onSelect', value)
     setState({ ...state, inputValue: value })
   }
 

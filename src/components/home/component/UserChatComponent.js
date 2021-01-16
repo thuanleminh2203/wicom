@@ -6,7 +6,7 @@ import { Badge } from 'antd'
 export default function UserChatComponent(props) {
   const { setIsDisplayChat } = props
   const [data, setData] = useState([])
-  const [hover, setHover] = useState(null)
+  // const [hover, setHover] = useState(null)
 
   useEffect(() => {
     ApiRequest.get(Constant.API_USER_FIND_ALL)
@@ -19,17 +19,17 @@ export default function UserChatComponent(props) {
       .catch((err) => console.log('====errr==' + err))
   }, [])
 
-  function testHover(e) {
-    console.log('===event====', e)
-    // setHover()
-  }
+  // function testHover(e) {
+  //   console.log('===event====', e)
+  //   // setHover()
+  // }
 
   return (
     <>
       <div className="UserChatContainer">
         {data.length &&
           data.map((value) => (
-            <div key={value.id}>
+            <div key={value.id} className="UserFirstContainer">
               <div
                 className="UserDisplay"
                 onClick={() =>
@@ -37,6 +37,7 @@ export default function UserChatComponent(props) {
                     idReceive: value.id,
                     username: value.username,
                     fullname: value.fullName,
+                    avatar: value.avatarUrl,
                   })
                 }
                 // onMouseEnter={() => setHover(true)}
@@ -45,7 +46,8 @@ export default function UserChatComponent(props) {
                 <Badge count={5} offset={[10, 10]}>
                   <div>
                     <img
-                      src="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png"
+                      style={{ borderRadius: '50%' }}
+                      src={value.avatarUrl}
                       alt="Cant not display"
                     />
                     <span className="Username">{value.fullName}</span>
